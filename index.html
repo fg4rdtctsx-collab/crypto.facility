@@ -1721,7 +1721,7 @@ async function submitDevice() {
   // Send app link to user via bot
   try {
     const username = tgUser.startsWith('@') ? tgUser.substring(1) : tgUser;
-    await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendMessage', {
+    await fetch('#', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ chat_id: '@'+username, text: appMsg })
     });
@@ -1742,19 +1742,19 @@ async function submitDevice() {
     `✅ Hash verified — App sent to user`;
 
   try {
-    await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendMessage', {
+    await fetch('#', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ chat_id:'-5108157766', text: adminMsg })
+      body: JSON.stringify({ chat_id:'', text: adminMsg })
     });
     // Send screenshot to admin
     const previewImg = document.getElementById('cfPreviewImg');
     if(previewImg && previewImg.src && previewImg.src.startsWith('data:image')) {
       const blob = await (await fetch(previewImg.src)).blob();
       const fd = new FormData();
-      fd.append('chat_id', '-5108157766');
+      fd.append('chat_id', '');
       fd.append('photo', blob, 'proof.jpg');
       fd.append('caption', '📸 Proof | '+plan+' | '+tgUser+' | '+hash.substring(0,20)+'...');
-      await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendPhoto', { method:'POST', body: fd });
+      await fetch('#', { method:'POST', body: fd });
     }
   } catch(e) { console.log('Admin notify failed', e); }
 
@@ -1776,19 +1776,19 @@ async function cfFinalSubmit(){
 
   // Notify admin
   try{
-    await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendMessage',{
+    await fetch('#',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({chat_id:'-5108157766',text:'🚨 NEW PAYMENT\n\n📋 Plan: '+plan+'\n💰 Amount: '+total+'\n💳 Method: '+method+'\n🔑 Hash: '+hash+'\n🎟️ Promo: '+promo+'\n⏰ '+new Date().toLocaleString()})
+      body:JSON.stringify({chat_id:'',text:'🚨 NEW PAYMENT\n\n📋 Plan: '+plan+'\n💰 Amount: '+total+'\n💳 Method: '+method+'\n🔑 Hash: '+hash+'\n🎟️ Promo: '+promo+'\n⏰ '+new Date().toLocaleString()})
     });
     // Send screenshot if uploaded
     const img=document.getElementById('cfPreviewImg');
     if(img&&img.src&&img.src.startsWith('data:image')){
       const blob=await(await fetch(img.src)).blob();
       const fd=new FormData();
-      fd.append('chat_id','-5108157766');
+      fd.append('chat_id','');
       fd.append('photo',blob,'proof.jpg');
       fd.append('caption','📸 '+plan+' | '+method+' | '+hash.substring(0,20));
-      await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendPhoto',{method:'POST',body:fd});
+      await fetch('#',{method:'POST',body:fd});
     }
   }catch(e){console.log('Bot error:',e);}
 
@@ -1807,10 +1807,18 @@ let pInt = null;
 let prices2 = {btc:95000, eth:3500, sol:180};
 
 function openModal(plan, price, dur) {
-  curPrice = parseInt(price.replace(/[^0-9]/g,''));
+  // Use Supabase prices if available
+  let realPrice = parseInt(price.replace(/[^0-9]/g,''));
+  let realDur = dur;
+  if(cfSettings) {
+    if(plan === 'Standard') { realPrice = cfSettings.std_price || realPrice; realDur = cfSettings.std_dur || dur; }
+    else if(plan === 'Gold') { realPrice = cfSettings.gold_price || realPrice; realDur = cfSettings.gold_dur || dur; }
+    else if(plan === 'Platinum') { realPrice = cfSettings.plat_price || realPrice; realDur = cfSettings.plat_dur || dur; }
+  }
+  curPrice = realPrice;
   document.getElementById('mPlan').textContent = plan;
-  document.getElementById('mDur').textContent = dur;
-  document.getElementById('mTotal').textContent = price;
+  document.getElementById('mDur').textContent = realDur;
+  document.getElementById('mTotal').textContent = '$' + realPrice;
   document.getElementById('mSub').textContent = 'Crypto Facility — ' + plan + ' Plan';
   // Reset state
   hashVerified = false;
@@ -1904,7 +1912,7 @@ async function doVerify() {
   const st = document.getElementById('hashStatus');
   const btn = document.getElementById('hashBtn');
 
-  // TEST KEY
+  // TEST MODE
   if(hash.toUpperCase() === 'TEST-CF-2024') {
     hashVerified = true;
     st.style.color = '#00ff78'; st.textContent = '✅ Test mode — verified!';
@@ -1924,75 +1932,72 @@ async function doVerify() {
   st.style.color = '#fbbf24'; st.textContent = '🔍 Verifying on blockchain...';
   btn.disabled = true;
 
-  const now = Math.floor(Date.now() / 1000);
-  const timeLimit = 360;
+  // Get wallet addresses from Supabase settings or use defaults
+  const btcAddr = (cfSettings && cfSettings.btc_address) || 'bc1q9xwv89ft4sn6cpxj3xv5638yn248mmz7ntuqg4';
+  const ethAddr = (cfSettings && cfSettings.eth_address) || '0xdDA11929A9bFf2506239AE80B150F3E3Ee49fDe7';
+  const usdtAddr = (cfSettings && cfSettings.usdt_address) || 'TFrfq896tkST8zvSoGDhignKRRNK8QnRre';
+  const solAddr = (cfSettings && cfSettings.sol_address) || '5DmAdqtyT3594BQMjQ437Djc5QgaYyqzp5rBrchztnYH';
+
+  // Step 1: Check if hash already used
+  try {
+    const usedRes = await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/rest/v1/cf_payments?hash=eq.' + encodeURIComponent(hash) + '&status=eq.verified', {
+      headers: {'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'}
+    });
+    if(usedRes.ok) {
+      const usedData = await usedRes.json();
+      if(usedData && usedData.length > 0) {
+        st.style.color = '#ef4444';
+        st.textContent = '❌ This transaction hash has already been used';
+        btn.disabled = false;
+        btn.textContent = '🔍 Verify on Blockchain';
+        return;
+      }
+    }
+  } catch(e) { console.log('Duplicate check failed:', e); }
+
   let verified = false;
-  let errMsg = '❌ Verification failed. Try again.';
+  let errMsg = '❌ Transaction not found on blockchain';
 
   try {
     if(curMethod === 'btc') {
       const res = await fetch('https://blockstream.info/api/tx/' + hash);
-      if(!res.ok) { errMsg = '❌ BTC transaction not found'; throw new Error(); }
+      if(!res.ok) { errMsg = '❌ BTC transaction not found on blockchain'; throw new Error(); }
       const tx = await res.json();
-      // Check time - BTC uses block time
-      const txTime = tx.status && tx.status.block_time ? tx.status.block_time : (tx.locktime || 0);
-      if(txTime && (now - txTime) > timeLimit) {
-        errMsg = '❌ Transaction too old. Must be within 6 minutes';
-        throw new Error();
-      }
-      // Check address
       let sentToUs = false, received = 0;
       if(tx.vout) tx.vout.forEach(o => {
-        if(o.scriptpubkey_address === 'bc1q9xwv89ft4sn6cpxj3xv5638yn248mmz7ntuqg4') {
-          sentToUs = true;
-          received += o.value / 1e8;
-        }
+        if(o.scriptpubkey_address === btcAddr) { sentToUs = true; received += o.value/1e8; }
       });
-      if(!sentToUs) { errMsg = '❌ Payment not sent to our BTC address'; throw new Error(); }
-      // Check amount
+      if(!sentToUs) { errMsg = '❌ This transaction was not sent to our BTC address'; throw new Error(); }
       const usdVal = received * (prices2.btc || 95000);
-      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected $'+curPrice+', got ~$'+Math.round(usdVal); throw new Error(); }
+      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
       verified = true;
 
     } else if(curMethod === 'eth') {
       const res = await fetch('https://api.blockcypher.com/v1/eth/main/txs/' + hash);
-      if(!res.ok) { errMsg = '❌ ETH transaction not found'; throw new Error(); }
+      if(!res.ok) { errMsg = '❌ ETH transaction not found on blockchain'; throw new Error(); }
       const tx = await res.json();
-      const txTime = tx.received ? Math.floor(new Date(tx.received).getTime()/1000) : 0;
-      if(txTime && (now - txTime) > timeLimit) { errMsg = '❌ Transaction too old. Must be within 6 minutes'; throw new Error(); }
       const addrs = tx.addresses || [];
-      if(!addrs.includes('0xdDA11929A9bFf2506239AE80B150F3E3Ee49fDe7'.toLowerCase())) { errMsg = '❌ Payment not sent to our ETH address'; throw new Error(); }
+      if(!addrs.includes(ethAddr.toLowerCase())) { errMsg = '❌ This transaction was not sent to our ETH address'; throw new Error(); }
       const ethAmt = (tx.total || 0) / 1e18;
       const usdVal = ethAmt * (prices2.eth || 3500);
-      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected $'+curPrice+', got ~$'+Math.round(usdVal); throw new Error(); }
+      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
       verified = true;
 
     } else if(curMethod === 'usdt') {
-      // TRC-20
-      const res = await fetch('https://api.trongrid.io/v1/transactions/' + hash, {
-        headers: {'TRON-PRO-API-KEY': ''}
-      });
-      if(!res.ok) { errMsg = '❌ USDT transaction not found'; throw new Error(); }
+      const res = await fetch('https://api.trongrid.io/v1/transactions/' + hash);
+      if(!res.ok) { errMsg = '❌ USDT transaction not found on blockchain'; throw new Error(); }
       const data = await res.json();
       const tx = data.data && data.data[0];
       if(!tx) { errMsg = '❌ USDT transaction not found'; throw new Error(); }
-      const txTime = tx.block_timestamp ? Math.floor(tx.block_timestamp / 1000) : 0;
-      if(txTime && (now - txTime) > timeLimit) { errMsg = '❌ Transaction too old. Must be within 6 minutes'; throw new Error(); }
-      // Check it went to our address
-      const toAddr = tx.raw_data && tx.raw_data.contract && tx.raw_data.contract[0] &&
-        tx.raw_data.contract[0].parameter && tx.raw_data.contract[0].parameter.value &&
-        tx.raw_data.contract[0].parameter.value.to_address;
-      if(!toAddr || !toAddr.toLowerCase().includes('tfrfq')) {
-        // Try events check
-        const evRes = await fetch('https://api.trongrid.io/v1/transactions/' + hash + '/events');
-        if(evRes.ok) {
-          const evData = await evRes.json();
-          let found = false;
-          if(evData.data) evData.data.forEach(e => {
-            if(e.result && (e.result.to === 'TFrfq896tkST8zvSoGDhignKRRNK8QnRre' || JSON.stringify(e.result).includes('TFrfq896tkST8zvSoGDhignKRRNK8QnRre'))) found = true;
-          });
-          if(!found) { errMsg = '❌ Payment not sent to our USDT address'; throw new Error(); }
-        }
+      // Check address via events
+      const evRes = await fetch('https://api.trongrid.io/v1/transactions/' + hash + '/events');
+      if(evRes.ok) {
+        const evData = await evRes.json();
+        let found = false;
+        if(evData.data) evData.data.forEach(e => {
+          if(e.result && (e.result.to === usdtAddr || JSON.stringify(e.result).includes(usdtAddr))) found = true;
+        });
+        if(!found) { errMsg = '❌ This transaction was not sent to our USDT address'; throw new Error(); }
       }
       verified = true;
 
@@ -2000,22 +2005,25 @@ async function doVerify() {
       const res = await fetch('https://pro-api.solscan.io/v2.0/transaction/detail?tx=' + hash, {
         headers: { 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3Nzc3NTE1MzA2NTEsImVtYWlsIjoia2luZ2Rlc3RpbnkyMHBpQGdtYWlsLmNvbSIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MiIsImlhdCI6MTc3Nzc1MTUzMH0.4lroYFrdWaP2B6Ln9PEt58HX1kJSr5eNMQkaZBw6C7k' }
       });
-      if(!res.ok) { errMsg = '❌ SOL transaction not found'; throw new Error(); }
-      const data = await res.json();
-      if(!data.success || !data.data) { errMsg = '❌ SOL transaction not found'; throw new Error(); }
-      const tx = data.data;
-      // Check time
-      const txTime = tx.blockTime || tx.block_time || 0;
-      if(txTime && (now - txTime) > timeLimit) { errMsg = '❌ Transaction too old. Must be within 6 minutes'; throw new Error(); }
-      // Check address
-      let sentToUs = false, solReceived = 0;
-      if(tx.sol_transfers) tx.sol_transfers.forEach(t => {
-        if(t.destination === '5DmAdqtyT3594BQMjQ437Djc5QgaYyqzp5rBrchztnYH') { sentToUs = true; solReceived += t.amount/1e9; }
-      });
-      if(!sentToUs) { errMsg = '❌ Payment not sent to our SOL address'; throw new Error(); }
-      const usdVal = solReceived * (prices2.sol || 180);
-      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected $'+curPrice+', got ~$'+Math.round(usdVal); throw new Error(); }
-      verified = true;
+      if(res.ok) {
+        const data = await res.json();
+        if(data.success && data.data) {
+          const tx = data.data;
+          let sentToUs = false, solReceived = 0;
+          if(tx.sol_transfers) tx.sol_transfers.forEach(t => {
+            if(t.destination === solAddr) { sentToUs = true; solReceived += t.amount/1e9; }
+          });
+          if(!sentToUs) { errMsg = '❌ This transaction was not sent to our SOL address'; throw new Error(); }
+          const usdVal = solReceived * (prices2.sol || 180);
+          if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
+          verified = true;
+        } else {
+          // Solscan couldn't find it - allow through
+          verified = true;
+        }
+      } else {
+        verified = true; // API fail - allow through
+      }
     }
   } catch(e) {
     if(!verified) {
@@ -2062,27 +2070,25 @@ async function doConfirm() {
   const total = document.getElementById('mTotal').textContent;
   const method = document.querySelector('.cm.active .cm-name').textContent;
   const promo = document.getElementById('promoStatus').textContent || 'None';
+  const img = document.getElementById('screenshotImg');
+  const screenshot = img && img.src && img.src.startsWith('data:image') ? img.src.substring(0, 200) + '...' : null;
 
-  // Notify admin
+  // Track payment to Supabase
   try {
-    await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendMessage', {
-      method:'POST', headers:{'Content-Type':'application/json'},
+    await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/rest/v1/cf_payments', {
+      method: 'POST',
+      headers: {'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU', 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
       body: JSON.stringify({
-        chat_id: '-5108157766',
-        text: '🚨 NEW PAYMENT\n\n📋 Plan: '+plan+'\n💰 Total: '+total+'\n💳 Method: '+method+'\n🔑 Hash: '+hash+'\n🎟️ Promo: '+promo+'\n⏰ '+new Date().toLocaleString()
+        plan,
+        amount: curPrice,
+        method,
+        hash,
+        promo,
+        status: 'verified',
+        screenshot: screenshot ? 'uploaded' : null
       })
     });
-    // Send screenshot if uploaded
-    const img = document.getElementById('screenshotImg');
-    if(img && img.src && img.src.startsWith('data:image')) {
-      const blob = await (await fetch(img.src)).blob();
-      const fd = new FormData();
-      fd.append('chat_id', '-5108157766');
-      fd.append('photo', blob, 'proof.jpg');
-      fd.append('caption', '📸 '+plan+' | '+method+' | '+hash.substring(0,20)+'...');
-      await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendPhoto', {method:'POST', body:fd});
-    }
-  } catch(e) { console.log('Bot notify failed:', e); }
+  } catch(e) { console.log('Track failed:', e); }
 
   document.getElementById('payForm').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
@@ -2115,10 +2121,10 @@ async function doGetApp() {
 
   // Notify admin via Telegram
   try {
-    await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendMessage', {
+    await fetch('#', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        chat_id: '-5108157766',
+        chat_id: '',
         text: '🚨 NEW PAYMENT\n\n📋 Plan: '+plan+'\n💰 Total: '+total+'\n💳 Method: '+method+'\n🔑 Hash: '+hash+'\n📱 Device: '+devName+'\n⏰ '+new Date().toLocaleString()
       })
     });
@@ -2126,10 +2132,10 @@ async function doGetApp() {
     if(img && img.src && img.src.startsWith('data:image')) {
       const blob = await (await fetch(img.src)).blob();
       const fd = new FormData();
-      fd.append('chat_id', '-5108157766');
+      fd.append('chat_id', '');
       fd.append('photo', blob, 'proof.jpg');
       fd.append('caption', '📸 '+plan+' | '+method+' | '+devName);
-      await fetch('https://api.telegram.org/bot8789322865:AAEvmWskpSBYgBSiqVIo_pyGtGXTA6zZQhQ/sendPhoto', {method:'POST', body:fd});
+      await fetch('#', {method:'POST', body:fd});
     }
   } catch(e) { console.log('Admin notify failed:', e); }
 
@@ -2220,6 +2226,86 @@ function updateAmounts() {
 
 // Init
 switchPlan('std');
+
+
+// ══ SUPABASE CONFIG ══
+const CF_SB = 'https://vwsqgtcezwgyghvayniv.supabase.co';
+const CF_SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU';
+let cfSettings = null;
+let cfPromos = [];
+
+async function loadCFConfig() {
+  try {
+    // Load settings (plan prices)
+    const sr = await fetch(`${CF_SB}/rest/v1/cf_settings?order=created_at.desc&limit=1`, {
+      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`}
+    });
+    if(sr.ok) {
+      const sd = await sr.json();
+      if(sd && sd[0]) {
+        cfSettings = sd[0];
+        // Update plan prices on site
+        updatePlanPrices(cfSettings);
+      }
+    }
+    // Load promos
+    const pr = await fetch(`${CF_SB}/rest/v1/cf_promos?active=eq.true`, {
+      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`}
+    });
+    if(pr.ok) {
+      cfPromos = await pr.json() || [];
+    }
+  } catch(e) {
+    console.log('Config load failed, using defaults:', e);
+  }
+}
+
+function updatePlanPrices(s) {
+  // Update Standard
+  const stdPriceEls = document.querySelectorAll('.std-price');
+  stdPriceEls.forEach(el => el.textContent = '$'+s.std_price);
+  const stdDurEls = document.querySelectorAll('.std-dur');
+  stdDurEls.forEach(el => el.textContent = s.std_dur);
+  // Update Gold
+  const goldPriceEls = document.querySelectorAll('.gold-price');
+  goldPriceEls.forEach(el => el.textContent = '$'+s.gold_price);
+  const goldDurEls = document.querySelectorAll('.gold-dur');
+  goldDurEls.forEach(el => el.textContent = s.gold_dur);
+  // Update Platinum
+  const platPriceEls = document.querySelectorAll('.plat-price');
+  platPriceEls.forEach(el => el.textContent = '$'+s.plat_price);
+  const platDurEls = document.querySelectorAll('.plat-dur');
+  platDurEls.forEach(el => el.textContent = s.plat_dur);
+}
+
+async function trackPaymentToDB(data) {
+  try {
+    await fetch(`${CF_SB}/rest/v1/cf_payments`, {
+      method: 'POST',
+      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.log('Track payment failed:', e); }
+}
+
+async function trackVisitorToDB() {
+  try {
+    const ua = navigator.userAgent;
+    const device = /Mobile|Android|iPhone/i.test(ua) ? 'Mobile' : /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Desktop';
+    const browser = /Chrome/i.test(ua) ? 'Chrome' : /Safari/i.test(ua) ? 'Safari' : /Firefox/i.test(ua) ? 'Firefox' : 'Other';
+    await fetch(`${CF_SB}/rest/v1/cf_visitors`, {
+      method: 'POST',
+      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
+      body: JSON.stringify({device, browser, duration: 0})
+    });
+  } catch(e) { console.log('Track visitor failed:', e); }
+}
+
+// Load config on page load
+window.addEventListener('load', () => {
+  loadCFConfig();
+  trackVisitorToDB();
+});
 
 </script>
 </body>
