@@ -2070,16 +2070,48 @@ async function doVerify() {
       verified = true;
 
     } else if(curMethod === 'usdt') {
-      // Use Tronscan — more reliable than Trongrid
+      // Try Tronscan API
       const res = await fetch('https://apilist.tronscanapi.com/api/transaction-info?hash=' + hash);
       if(!res.ok) { errMsg = '❌ USDT transaction not found on blockchain'; throw new Error(); }
       const tx = await res.json();
       if(!tx || !tx.hash) { errMsg = '❌ USDT transaction not found. Please wait a few minutes and try again.'; throw new Error(); }
-      // Strict address check — to address must exactly match
-      const toAddr = (tx.toAddress || tx.contractData && tx.contractData.to_address || '').toLowerCase();
-      if(!toAddr || toAddr !== usdtAddr.toLowerCase()) { errMsg = '❌ This transaction was not sent to our USDT address'; throw new Error(); }
-      // Amount check — USDT 6 decimals
-      const usdtAmt = (tx.contractData && tx.contractData.amount || tx.amount || 0) / 1e6;
+
+      // Get all possible address fields from response
+      const toAddr = (
+        tx.toAddress ||
+        (tx.contractData && tx.contractData.to_address) ||
+        (tx.tokenTransferInfo && tx.tokenTransferInfo.to_address) ||
+        ''
+      ).toLowerCase().trim();
+
+      const ourAddr = usdtAddr.toLowerCase().trim();
+
+      // Also check inside token transfer info and contract list
+      let addressMatch = toAddr === ourAddr;
+      if(!addressMatch && tx.contractData) {
+        const raw = JSON.stringify(tx.contractData).toLowerCase();
+        addressMatch = raw.includes(ourAddr);
+      }
+      if(!addressMatch && tx.tokenTransferInfo) {
+        const raw = JSON.stringify(tx.tokenTransferInfo).toLowerCase();
+        addressMatch = raw.includes(ourAddr);
+      }
+      if(!addressMatch && tx.contractList) {
+        tx.contractList.forEach(c => {
+          const raw = JSON.stringify(c).toLowerCase();
+          if(raw.includes(ourAddr)) addressMatch = true;
+        });
+      }
+
+      if(!addressMatch) { errMsg = '❌ This transaction was not sent to our USDT address. Please check you sent to the correct TRC-20 address.'; throw new Error(); }
+
+      // Amount check — try multiple fields, USDT is 6 decimals on Tron
+      let usdtAmt = 0;
+      if(tx.contractData && tx.contractData.amount) usdtAmt = tx.contractData.amount / 1e6;
+      else if(tx.tokenTransferInfo && tx.tokenTransferInfo.amount_str) usdtAmt = parseFloat(tx.tokenTransferInfo.amount_str) / 1e6;
+      else if(tx.amount) usdtAmt = tx.amount / 1e6;
+      else if(tx.contractData && tx.contractData.call_value) usdtAmt = tx.contractData.call_value / 1e6;
+
       if(usdtAmt < curPrice - 5) { errMsg = '❌ Amount too low. You sent ~$' + Math.round(usdtAmt) + ' USDT but need at least ~$' + (curPrice-5) + '. Please send the difference and try again.'; throw new Error(); }
       verified = true;
 
