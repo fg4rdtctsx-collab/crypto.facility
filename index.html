@@ -2018,7 +2018,7 @@ async function doVerify() {
 
   // Step 1: Check if hash already used
   try {
-    const usedRes = await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/rest/v1/cf_payments?hash=eq.' + encodeURIComponent(hash) + '&status=eq.verified', {
+    const usedRes = await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/rest/v1/cf_payments?hash=eq.' + encodeURIComponent(hash), {
       headers: {'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'}
     });
     if(usedRes.ok) {
@@ -2031,7 +2031,13 @@ async function doVerify() {
         return;
       }
     }
-  } catch(e) { console.log('Duplicate check failed:', e); }
+  } catch(e) {
+    // If duplicate check fails, block it — don't allow through
+    st.style.color = '#ef4444';
+    st.textContent = '❌ Verification failed. Please check your connection and try again.';
+    btn.disabled = false;
+    return;
+  }
 
   let verified = false;
   let errMsg = '❌ Transaction not found on blockchain';
@@ -2041,67 +2047,70 @@ async function doVerify() {
       const res = await fetch('https://blockstream.info/api/tx/' + hash);
       if(!res.ok) { errMsg = '❌ BTC transaction not found on blockchain'; throw new Error(); }
       const tx = await res.json();
+      // Strict: only count outputs going TO our address
       let sentToUs = false, received = 0;
       if(tx.vout) tx.vout.forEach(o => {
-        if(o.scriptpubkey_address === btcAddr) { sentToUs = true; received += o.value/1e8; }
+        if(o.scriptpubkey_address && o.scriptpubkey_address.trim() === btcAddr.trim()) { sentToUs = true; received += o.value/1e8; }
       });
       if(!sentToUs) { errMsg = '❌ This transaction was not sent to our BTC address'; throw new Error(); }
       const usdVal = received * (prices2.btc || 95000);
-      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
+      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. You sent ~$' + Math.round(usdVal) + ' but need at least ~$' + (curPrice-5) + '. Please send the difference and try again.'; throw new Error(); }
       verified = true;
 
     } else if(curMethod === 'eth') {
       const res = await fetch('https://api.blockcypher.com/v1/eth/main/txs/' + hash);
       if(!res.ok) { errMsg = '❌ ETH transaction not found on blockchain'; throw new Error(); }
       const tx = await res.json();
-      const addrs = tx.addresses || [];
-      if(!addrs.includes(ethAddr.toLowerCase())) { errMsg = '❌ This transaction was not sent to our ETH address'; throw new Error(); }
+      // Strict: check receiver only, not sender
+      const receiver = (tx.outputs && tx.outputs[0] && tx.outputs[0].addresses && tx.outputs[0].addresses[0]) || '';
+      if(receiver.toLowerCase() !== ethAddr.toLowerCase()) { errMsg = '❌ This transaction was not sent to our ETH address'; throw new Error(); }
       const ethAmt = (tx.total || 0) / 1e18;
       const usdVal = ethAmt * (prices2.eth || 3500);
-      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
+      if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. You sent ~$' + Math.round(usdVal) + ' but need at least ~$' + (curPrice-5) + '. Please send the difference and try again.'; throw new Error(); }
       verified = true;
 
     } else if(curMethod === 'usdt') {
-      const res = await fetch('https://api.trongrid.io/v1/transactions/' + hash);
+      // Use Tronscan — more reliable than Trongrid
+      const res = await fetch('https://apilist.tronscanapi.com/api/transaction-info?hash=' + hash);
       if(!res.ok) { errMsg = '❌ USDT transaction not found on blockchain'; throw new Error(); }
-      const data = await res.json();
-      const tx = data.data && data.data[0];
-      if(!tx) { errMsg = '❌ USDT transaction not found'; throw new Error(); }
-      // Check address via events
-      const evRes = await fetch('https://api.trongrid.io/v1/transactions/' + hash + '/events');
-      if(evRes.ok) {
-        const evData = await evRes.json();
-        let found = false;
-        if(evData.data) evData.data.forEach(e => {
-          if(e.result && (e.result.to === usdtAddr || JSON.stringify(e.result).includes(usdtAddr))) found = true;
-        });
-        if(!found) { errMsg = '❌ This transaction was not sent to our USDT address'; throw new Error(); }
-      }
+      const tx = await res.json();
+      if(!tx || !tx.hash) { errMsg = '❌ USDT transaction not found. Please wait a few minutes and try again.'; throw new Error(); }
+      // Strict address check — to address must exactly match
+      const toAddr = (tx.toAddress || tx.contractData && tx.contractData.to_address || '').toLowerCase();
+      if(!toAddr || toAddr !== usdtAddr.toLowerCase()) { errMsg = '❌ This transaction was not sent to our USDT address'; throw new Error(); }
+      // Amount check — USDT 6 decimals
+      const usdtAmt = (tx.contractData && tx.contractData.amount || tx.amount || 0) / 1e6;
+      if(usdtAmt < curPrice - 5) { errMsg = '❌ Amount too low. You sent ~$' + Math.round(usdtAmt) + ' USDT but need at least ~$' + (curPrice-5) + '. Please send the difference and try again.'; throw new Error(); }
       verified = true;
 
     } else if(curMethod === 'sol') {
       const res = await fetch('https://pro-api.solscan.io/v2.0/transaction/detail?tx=' + hash, {
         headers: { 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3Nzc3NTE1MzA2NTEsImVtYWlsIjoia2luZ2Rlc3RpbnkyMHBpQGdtYWlsLmNvbSIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MiIsImlhdCI6MTc3Nzc1MTUzMH0.4lroYFrdWaP2B6Ln9PEt58HX1kJSr5eNMQkaZBw6C7k' }
       });
-      if(res.ok) {
-        const data = await res.json();
-        if(data.success && data.data) {
-          const tx = data.data;
-          let sentToUs = false, solReceived = 0;
-          if(tx.sol_transfers) tx.sol_transfers.forEach(t => {
-            if(t.destination === solAddr) { sentToUs = true; solReceived += t.amount/1e9; }
-          });
-          if(!sentToUs) { errMsg = '❌ This transaction was not sent to our SOL address'; throw new Error(); }
-          const usdVal = solReceived * (prices2.sol || 180);
-          if(usdVal < curPrice - 5) { errMsg = '❌ Amount too low. Expected ~$' + curPrice + ', got ~$' + Math.round(usdVal); throw new Error(); }
-          verified = true;
-        } else {
-          // Solscan couldn't find it - allow through
-          verified = true;
-        }
-      } else {
-        verified = true; // API fail - allow through
+      if(!res.ok) { errMsg = '❌ Could not verify transaction. Please try again shortly.'; throw new Error(); }
+      const data = await res.json();
+      if(!data.success || !data.data) { errMsg = '❌ Transaction not found. Please wait a few minutes and try again.'; throw new Error(); }
+      const tx = data.data;
+
+      // Strict address check — must go EXACTLY to our SOL address
+      let sentToUs = false, solReceived = 0;
+      if(tx.sol_transfers) {
+        tx.sol_transfers.forEach(t => {
+          if(t.destination && t.destination.trim() === solAddr.trim()) {
+            sentToUs = true;
+            solReceived += t.amount / 1e9;
+          }
+        });
       }
+      if(!sentToUs) { errMsg = '❌ This transaction was not sent to our SOL address. Make sure you are sending to the correct wallet.'; throw new Error(); }
+
+      // 3. Amount check with $5 tolerance — accept $195+ for $200 plan etc
+      const usdVal = solReceived * (prices2.sol || 180);
+      if(usdVal < curPrice - 5) {
+        errMsg = '❌ Amount too low. You sent ~$' + Math.round(usdVal) + ' but need at least ~$' + (curPrice - 5) + '. Please send the difference and submit a new transaction.';
+        throw new Error();
+      }
+      verified = true;
     }
   } catch(e) {
     if(!verified) {
