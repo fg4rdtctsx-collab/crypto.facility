@@ -2402,11 +2402,12 @@ async function loadCFConfig() {
       }
     }
     // Load promos
-    const pr = await fetch(`${CF_SB}/rest/v1/cf_promos?active=eq.true`, {
-      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`}
+    const pr = await fetch(`${CF_SB}/rest/v1/cf_promos?select=*`, {
+      headers: {'apikey': CF_SK, 'Authorization': `Bearer ${CF_SK}`, 'Prefer': 'return=representation'}
     });
     if(pr.ok) {
-      cfPromos = await pr.json() || [];
+      const prData = await pr.json();
+      cfPromos = Array.isArray(prData) ? prData.filter(p => p.active) : [];
     }
   } catch(e) {
     console.log('Config load failed, using defaults:', e);
