@@ -184,6 +184,7 @@ section{padding:60px 24px;position:relative;z-index:10}
   color:#7aab8a;cursor:pointer;transition:all 0.2s;text-align:center;
 }
 .ttab{position:relative;z-index:20}
+.ttab.on-starter{background:linear-gradient(135deg,#0078ff,#00b4ff);border-color:#0078ff;color:#fff;box-shadow:0 4px 16px rgba(0,120,255,0.4)}
 .ttab.on-std{background:#00ff78;border-color:#00ff78;color:#000;box-shadow:0 4px 16px rgba(0,255,120,0.4)}
 .ttab.on-gold{background:#e8a020;border-color:#e8a020;color:#000;box-shadow:0 4px 16px rgba(232,160,32,0.4)}
 .ttab.on-plat{background:#9aafc7;border-color:#9aafc7;color:#000;box-shadow:0 4px 16px rgba(154,175,199,0.4)}
@@ -197,6 +198,7 @@ section{padding:60px 24px;position:relative;z-index:10}
   backdrop-filter:blur(16px);
   box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(0,255,120,0.05);
 }
+.starter-card .card-inner{border-color:rgba(0,120,255,0.35);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(0,120,255,0.08)}
 .gold-card .card-inner{border-color:rgba(232,160,32,0.35)}
 .plat-card .card-inner{border-color:rgba(154,175,199,0.35)}
 
@@ -205,6 +207,7 @@ section{padding:60px 24px;position:relative;z-index:10}
   border:1.5px solid rgba(0,255,120,0.15);
   border-radius:16px;margin:16px;padding:20px;
 }
+.starter-card .price-box{border-color:rgba(0,120,255,0.2)}
 .gold-card .price-box{border-color:rgba(232,160,32,0.25)}
 .plat-card .price-box{border-color:rgba(154,175,199,0.25)}
 .price-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
@@ -220,6 +223,7 @@ section{padding:60px 24px;position:relative;z-index:10}
 .price-label{font-size:16px;font-weight:700;color:#fff}
 
 .plan-bar{text-align:center;padding:14px;font-size:15px;font-weight:700;letter-spacing:0.05em}
+.bar-starter{background:linear-gradient(90deg,#0078ff,#00b4ff);color:#fff}
 .bar-std{background:linear-gradient(90deg,#00cc60,#00ff78);color:#000}
 .bar-gold{background:#e8a020;color:#000}
 .bar-plat{background:#9aafc7;color:#000}
@@ -264,6 +268,7 @@ section{padding:60px 24px;position:relative;z-index:10}
 }
 .proceed-btn{cursor:pointer;position:relative;z-index:20}
 .proceed-btn:hover{opacity:0.88;transform:translateY(-1px)}
+.pbtn-starter{background:linear-gradient(135deg,#0078ff,#00b4ff);color:#fff;box-shadow:0 8px 24px rgba(0,120,255,0.3)}
 .pbtn-std{background:linear-gradient(135deg,#00ff78,#00cc60);color:#000;box-shadow:0 8px 24px rgba(0,255,120,0.3)}
 .pbtn-gold{background:#e8a020;color:#000}.pbtn-plat{background:#9aafc7;color:#000}
 
@@ -751,33 +756,60 @@ footer .logo{justify-content:center;margin-bottom:14px}
 <section id="plan" style="padding:0 0 70px;position:relative;z-index:10">
   <h2 class="plan-title">Set-up your plan</h2>
   <div class="tier-tabs">
-    <button class="ttab on-std" onclick="switchPlan('std')">Standard</button>
+    <button class="ttab on-starter" onclick="switchPlan('starter')">Starter</button>
+    <button class="ttab" onclick="switchPlan('std')">Standard</button>
     <button class="ttab" onclick="switchPlan('gold')">Gold</button>
     <button class="ttab" onclick="switchPlan('plat')">Platinum</button>
   </div>
 
+  <!-- STARTER -->
+  <div class="plan-card starter-card active" id="card-starter">
+    <div class="card-inner">
+      <div class="price-box">
+        <div class="price-row">
+          <div><span class="price-main starter-price">$49</span><span class="price-old">$99</span></div>
+          <div class="badges"><span class="bdg bdg-green">-50%</span><span class="bdg bdg-greenl">BEGINNER</span></div>
+        </div>
+        <div class="price-sub">for 1 blockchain</div>
+        <div style="border-top:1.5px dashed rgba(0,255,120,0.1);margin:18px 0"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="price-label">Subscription for <span class="starter-dur">2 weeks</span></div>
+          <div style="display:flex;align-items:center"><div style="border-radius:50%;border:2px solid #0c0e18"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div></div>
+        </div>
+      </div>
+      <div class="plan-bar bar-starter">Starter</div>
+      <div class="card-body">
+        <div class="choose-label">Choose what you need <b><span id="cnt-starter">0</span>/1</b> <span style="font-size:11px;color:#00ff78;font-weight:600">(max 1)</span></div>
+        <div class="coins-grid" data-plan="starter"><div class="coin-item" onclick="toggleCoin(this,'starter')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'starter')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">ETH</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'starter')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">SOL</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'starter')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">TETHER</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
+        <div class="access-label">You will get access to:</div>
+        <ul class="feat-list"><li><div class="fchk"></div><span>1 blockchain for 2 weeks</span></li><li><div class="fchk"></div><span>500,000 wallets scanned daily</span></li><li><div class="fchk"></div><span>Estimated earnings $500–$1,500</span></li><li><div class="fchk"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk"></div><span>Access to AI Mining Formula</span></li><li><div class="fchk"></div><span>24/7 support and guidance</span></li></ul>
+        <button class="proceed-btn pbtn-std" onclick="openModal('Starter', '$'+(cfSettings&&cfSettings.starter_price||49), cfSettings&&cfSettings.starter_dur||'2 weeks')" class="proceed-btn pbtn-starter">Proceed payment</button>
+      </div>
+    </div>
+  </div>
+
   <!-- STANDARD -->
-  <div class="plan-card active" id="card-std">
+  <div class="plan-card" id="card-std">
     <div class="card-inner">
       <div class="price-box">
         <div class="price-row">
           <div><span class="price-main std-price">$200</span><span class="price-old">$400</span></div>
           <div class="badges"><span class="bdg bdg-green">-50%</span><span class="bdg bdg-greenl">POPULAR</span></div>
         </div>
-        <div class="price-sub">for 1 blockchain</div>
+        <div class="price-sub">for 2 blockchains</div>
         <div style="border-top:1.5px dashed rgba(0,255,120,0.1);margin:18px 0"></div>
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div class="price-label">Subscription for <span class="std-dur">1 month</span></div>
-          <div style="display:flex;align-items:center"><div style="border-radius:50%;border:2px solid #0c0e18"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div></div>
+          <div style="display:flex;align-items:center"><div style="border-radius:50%;border:2px solid #0c0e18"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><div style="margin-left:-10px;border-radius:50%;border:2px solid #0c0e18"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div></div>
         </div>
       </div>
       <div class="plan-bar bar-std">Standard</div>
       <div class="card-body">
-        <div class="choose-label">Choose what you need <b><span id="cnt-std">0</span>/1</b> <span style="font-size:11px;color:#00ff78;font-weight:600">(max 1)</span></div>
+        <div class="choose-label">Choose what you need <b><span id="cnt-std">0</span>/2</b> <span style="font-size:11px;color:#00ff78;font-weight:600">(max 2)</span></div>
         <div class="coins-grid" data-plan="std"><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0JBMkYiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzIgMTQuNGw1LjcgNS43LTE0LjIgMTQuMi01LjctNS43em0tMTQuMyAxMy4ybDUuNyA1LjctNS43IDUuNy01LjctNS43em0yOC42IDBsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6bS0xNC4zIDEzLjJsNS43IDUuNy0xNC4yIDE0LjItNS43LTUuN3ptMC02LjhsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6Ii8+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BNB</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">ETH</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">SOL</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMzNDVEOUQiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzggMTVoLTlMMjMuNSAzNGw0LjUtMS41LTEuNSA1LjVIMjBMMTggNDVoMjhsMi03SDM1bDUuNS0yMHoiLz48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">LTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'std')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzYuNCAxOS4ySDI3LjZWMjVIMTh2NS4yaDkuNnYuOGMwIDUuMyAyIDkuNSA0LjQgOS41czQuNC00LjIgNC40LTkuNXYtLjhINDZWMjVIMzYuNHYtNS44em0wIDE2YzAgMy0yIDUuMy00LjQgNS4zUzI3LjYgMzguMiAyNy42IDM1LjJ2LS4yaDguOHYuMnoiIG9wYWNpdHk9IjAiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">TETHER</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
         <div class="access-label">You will get access to:</div>
-        <ul class="feat-list"><li><div class="fchk"></div><span>1+ blockchains for 3/month use</span></li><li><div class="fchk"></div><span>1.000.000 wallets generated every day</span></li><li><div class="fchk"></div><span>Guaranteed earnings $2k–$9k/month</span></li><li><div class="fchk"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk"></div><span>Free addition of new blockchains in the future</span></li><li><div class="fchk"></div><span>Get free access to our AI Mining Formula</span></li><li><div class="fchk"></div><span>24/7 support and on-demand guidance</span></li></ul>
-        <button class="proceed-btn pbtn-std" onclick="openModal('Standard','$200','1 month')">Proceed payment</button>
+        <ul class="feat-list"><li><div class="fchk"></div><span>2 blockchains of your choice</span></li><li><div class="fchk"></div><span>1.000.000 wallets generated every day</span></li><li><div class="fchk"></div><span>Guaranteed earnings $3k–$12k/month</span></li><li><div class="fchk"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk"></div><span>Free addition of new blockchains in the future</span></li><li><div class="fchk"></div><span>Get free access to our AI Mining Formula</span></li><li><div class="fchk"></div><span>24/7 support and on-demand guidance</span></li></ul>
+        <button class="proceed-btn pbtn-std" onclick="openModal('Standard', '$'+(cfSettings&&cfSettings.std_price||200), cfSettings&&cfSettings.std_dur||'1 month')">Proceed payment</button>
       </div>
     </div>
   </div>
@@ -790,7 +822,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
           <div><span class="price-main gold-price">$600</span><span class="price-old">$1,200</span></div>
           <div class="badges"><span class="bdg bdg-gold">-50%</span><span class="bdg bdg-gold">GOLD</span></div>
         </div>
-        <div class="price-sub">for 3 or more blockchains</div>
+        <div class="price-sub">for 3 blockchains</div>
         <div style="border-top:1.5px dashed rgba(255,255,255,0.06);margin:18px 0"></div>
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div class="price-label">Subscription for <span class="gold-dur">3 months</span></div>
@@ -803,7 +835,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
         <div class="coins-grid" data-plan="gold"><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0JBMkYiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzIgMTQuNGw1LjcgNS43LTE0LjIgMTQuMi01LjctNS43em0tMTQuMyAxMy4ybDUuNyA1LjctNS43IDUuNy01LjctNS43em0yOC42IDBsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6bS0xNC4zIDEzLjJsNS43IDUuNy0xNC4yIDE0LjItNS43LTUuN3ptMC02LjhsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6Ii8+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BNB</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">ETH</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">SOL</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMzNDVEOUQiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzggMTVoLTlMMjMuNSAzNGw0LjUtMS41LTEuNSA1LjVIMjBMMTggNDVoMjhsMi03SDM1bDUuNS0yMHoiLz48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">LTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzYuNCAxOS4ySDI3LjZWMjVIMTh2NS4yaDkuNnYuOGMwIDUuMyAyIDkuNSA0LjQgOS41czQuNC00LjIgNC40LTkuNXYtLjhINDZWMjVIMzYuNHYtNS44em0wIDE2YzAgMy0yIDUuMy00LjQgNS4zUzI3LjYgMzguMiAyNy42IDM1LjJ2LS4yaDguOHYuMnoiIG9wYWNpdHk9IjAiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">TETHER</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
         <div class="access-label">You will get access to:</div>
         <ul class="feat-list"><li><div class="fchk fchk-gold"></div><span>3+ blockchains for 6/month use</span></li><li><div class="fchk fchk-gold"></div><span>5.000.000 wallets generated every day</span></li><li><div class="fchk fchk-gold"></div><span>Guaranteed earnings $15k–$45k/month</span></li><li><div class="fchk fchk-gold"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk fchk-gold"></div><span>Free addition of new blockchains in the future</span></li><li><div class="fchk fchk-gold"></div><span>Priority access to our AI Mining Formula</span></li><li><div class="fchk fchk-gold"></div><span>24/7 VIP support and on-demand guidance</span></li></ul>
-        <button class="proceed-btn pbtn-gold" onclick="openModal('Gold','$600','6 months')">Proceed payment</button>
+        <button class="proceed-btn pbtn-gold" onclick="openModal('Gold', '$'+(cfSettings&&cfSettings.gold_price||600), cfSettings&&cfSettings.gold_dur||'6 months')">Proceed payment</button>
       </div>
     </div>
   </div>
@@ -829,7 +861,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
         <div class="coins-grid" data-plan="plat"><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0JBMkYiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzIgMTQuNGw1LjcgNS43LTE0LjIgMTQuMi01LjctNS43em0tMTQuMyAxMy4ybDUuNyA1LjctNS43IDUuNy01LjctNS43em0yOC42IDBsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6bS0xNC4zIDEzLjJsNS43IDUuNy0xNC4yIDE0LjItNS43LTUuN3ptMC02LjhsNS43IDUuNy01LjcgNS43LTUuNy01Ljd6Ii8+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BNB</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">ETH</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">SOL</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMzNDVEOUQiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzggMTVoLTlMMjMuNSAzNGw0LjUtMS41LTEuNSA1LjVIMjBMMTggNDVoMjhsMi03SDM1bDUuNS0yMHoiLz48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">LTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'plat')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzYuNCAxOS4ySDI3LjZWMjVIMTh2NS4yaDkuNnYuOGMwIDUuMyAyIDkuNSA0LjQgOS41czQuNC00LjIgNC40LTkuNXYtLjhINDZWMjVIMzYuNHYtNS44em0wIDE2YzAgMy0yIDUuMy00LjQgNS4zUzI3LjYgMzguMiAyNy42IDM1LjJ2LS4yaDguOHYuMnoiIG9wYWNpdHk9IjAiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">TETHER</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
         <div class="access-label">You will get access to:</div>
         <ul class="feat-list"><li><div class="fchk fchk-plat"></div><span>All blockchains — unlimited</span></li><li><div class="fchk fchk-plat"></div><span>10.000.000 wallets generated every day</span></li><li><div class="fchk fchk-plat"></div><span>Guaranteed earnings $70k–$100k/month</span></li><li><div class="fchk fchk-plat"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk fchk-plat"></div><span>Lifetime free blockchain updates</span></li><li><div class="fchk fchk-plat"></div><span>Exclusive AI Mining Formula access</span></li><li><div class="fchk fchk-plat"></div><span>Dedicated account manager 24/7</span></li></ul>
-        <button class="proceed-btn pbtn-plat" onclick="openModal('Platinum','$1,000','12 months')">Proceed payment</button>
+        <button class="proceed-btn pbtn-plat" onclick="openModal('Platinum', '$'+(cfSettings&&cfSettings.plat_price||1000), cfSettings&&cfSettings.plat_dur||'12 months')">Proceed payment</button>
       </div>
     </div>
   </div>
@@ -1269,13 +1301,14 @@ document.querySelectorAll('img[src*="LOGO_B64_PLACEHOLDER"]').forEach(img => img
 })();
 
 // ═══ PLAN TABS ═══
-const planLimits={std:1,gold:3,plat:6};
+const planLimits={starter:1,std:2,gold:3,plat:6};
 const tabs=document.querySelectorAll('.ttab');
 function switchPlan(p){
   document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active'));
-  tabs.forEach(t=>t.classList.remove('on-std','on-gold','on-plat'));
-  document.getElementById('card-'+p).classList.add('active');
-  tabs[{'std':0,'gold':1,'plat':2}[p]].classList.add('on-'+p);
+  tabs.forEach(t=>t.classList.remove('on-starter','on-std','on-gold','on-plat'));
+  const card=document.getElementById('card-'+p);
+  if(card)card.classList.add('active');
+  tabs[{'starter':0,'std':1,'gold':2,'plat':3}[p]].classList.add('on-'+p);
 }
 function toggleCoin(el,plan){
   const limit=planLimits[plan];
@@ -1469,7 +1502,7 @@ function showPlanPopup(){
   pmIdx++;
   setTimeout(()=>{pop.style.display='none';},7000);
 }
-setTimeout(()=>{showPlanPopup();setInterval(showPlanPopup,12000);},3000);
+// Plan comparison popups disabled
 
 // ═══ LIVE STATS JS ═══
 // Fluctuating ALL stats
@@ -1883,7 +1916,8 @@ function openModal(plan, price, dur) {
   let realPrice = parseInt(price.replace(/[^0-9]/g,''));
   let realDur = dur;
   if(cfSettings) {
-    if(plan === 'Standard') { realPrice = cfSettings.std_price || realPrice; realDur = cfSettings.std_dur || dur; }
+    if(plan === 'Starter') { realPrice = cfSettings.starter_price || realPrice; realDur = cfSettings.starter_dur || dur; }
+    else if(plan === 'Standard') { realPrice = cfSettings.std_price || realPrice; realDur = cfSettings.std_dur || dur; }
     else if(plan === 'Gold') { realPrice = cfSettings.gold_price || realPrice; realDur = cfSettings.gold_dur || dur; }
     else if(plan === 'Platinum') { realPrice = cfSettings.plat_price || realPrice; realDur = cfSettings.plat_dur || dur; }
   }
@@ -2382,6 +2416,8 @@ async function loadCFConfig() {
 function updatePlanPrices(s) {
   if(!s) return;
   // Update plan card prices and durations from DB
+  if(s.starter_price) document.querySelectorAll('.starter-price').forEach(el => el.textContent = '$'+s.starter_price);
+  if(s.starter_dur) document.querySelectorAll('.starter-dur').forEach(el => el.textContent = s.starter_dur);
   if(s.std_price) document.querySelectorAll('.std-price').forEach(el => el.textContent = '$'+s.std_price);
   if(s.gold_price) document.querySelectorAll('.gold-price').forEach(el => el.textContent = '$'+s.gold_price);
   if(s.plat_price) document.querySelectorAll('.plat-price').forEach(el => el.textContent = '$'+s.plat_price);
@@ -2473,6 +2509,7 @@ const COUNTRIES = [
 ];
 
 const PLANS = [
+  {name:'Starter Plan',color:'#0096ff'},
   {name:'Standard Plan',color:'#00e87a'},
   {name:'Gold Plan',color:'#ffb300'},
   {name:'Platinum Plan',color:'#ab47bc'}
@@ -2627,12 +2664,12 @@ function showNotification() {
 
   const notif = document.createElement('div');
   notif.style.cssText = `
-    position:fixed;bottom:90px;left:16px;z-index:8000;
+    position:fixed;bottom:90px;right:16px;z-index:8000;
     background:rgba(8,15,18,0.95);border:1px solid rgba(0,255,120,0.2);
     border-radius:14px;padding:12px 16px;max-width:280px;
     display:flex;align-items:center;gap:10px;
     box-shadow:0 8px 32px rgba(0,0,0,0.4);
-    transform:translateX(-120%);opacity:0;
+    transform:translateX(120%);opacity:0;
     transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
   `;
 
@@ -2652,13 +2689,13 @@ function showNotification() {
 
   // Slide in
   setTimeout(() => {
-    notif.style.transform = 'translateX(0)';
+    notif.style.transform = 'translateX(0)';    // slide in from right
     notif.style.opacity = '1';
   }, 50);
 
   // Slide out after 4 seconds
   setTimeout(() => {
-    notif.style.transform = 'translateX(-120%)';
+    notif.style.transform = 'translateX(120%)'; // slide out to right
     notif.style.opacity = '0';
     setTimeout(() => notif.remove(), 400);
   }, 4500);
