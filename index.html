@@ -1323,21 +1323,53 @@ function toggleCoin(el,plan){
 
 // ═══ MODAL ═══
 let curPlan='',priceInterval=null,currentPlanPrice=200;
-function openModal(plan,price,dur){
+async function openModal(plan,price,dur){
   curPlan=plan;
-  document.getElementById('mPlan').textContent=plan;
-  document.getElementById('mDur').textContent=dur;
-  document.getElementById('mTotal').textContent=price;
-  document.getElementById('modalSub').textContent='Crypto Facility — '+plan+' Plan';
-  document.getElementById('payForm').style.display='block';
-  document.getElementById('successScreen').style.display='none';
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  currentPlanPrice=parseInt(price.replace(/[^0-9]/g,''));
-  selectMethod('btc');
-  fetchAllPrices();
-  if(priceInterval)clearInterval(priceInterval);
-  priceInterval=setInterval(fetchAllPrices,30000);
+  curPrice=parseInt((price+'').replace(/[^0-9]/g,''));
+  const ua=navigator.userAgent;
+  const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
+
+  // Show a simple loading overlay — don't open modal yet
+  const loadDiv = document.createElement('div');
+  loadDiv.id = 'oxa-loading';
+  loadDiv.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
+  loadDiv.innerHTML = '<div style="font-size:40px;margin-bottom:16px">⏳</div><div style="color:#00ff78;font-size:18px;font-weight:700">Creating payment...</div><div style="color:#5a9a6a;font-size:13px;margin-top:8px">Please wait</div>';
+  document.body.appendChild(loadDiv);
+
+  try {
+    const res = await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/functions/v1/create-invoice', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'
+      },
+      body: JSON.stringify({ amount: curPrice, plan, method: 'crypto', device })
+    });
+    const data = await res.json();
+    if(data.success && data.payLink) {
+      window.location.href = data.payLink;
+      return;
+    }
+    throw new Error('No payLink returned');
+  } catch(e) {
+    console.error('OxaPay error:', e);
+    // Remove loading overlay and fall back to old modal
+    const ld = document.getElementById('oxa-loading');
+    if(ld) ld.remove();
+    document.getElementById('mPlan').textContent=plan;
+    document.getElementById('mDur').textContent=dur;
+    document.getElementById('mTotal').textContent=price;
+    document.getElementById('modalSub').textContent='Crypto Facility — '+plan+' Plan';
+    document.getElementById('payForm').style.display='block';
+    document.getElementById('successScreen').style.display='none';
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+    selectMethod('btc');
+    fetchAllPrices();
+    if(priceInterval)clearInterval(priceInterval);
+    priceInterval=setInterval(fetchAllPrices,30000);
+  }
 }
 function closeModal(){
   document.getElementById('modalOverlay').classList.remove('open');
@@ -2474,6 +2506,19 @@ async function trackVisitorToDB() {
 window.addEventListener('load', () => {
   loadCFConfig();
   trackVisitorToDB();
+  // Handle OxaPay return
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('payment') === 'success') {
+    // Show success message
+    setTimeout(() => {
+      document.getElementById('modalOverlay').classList.add('open');
+      document.body.style.overflow='hidden';
+      document.getElementById('payForm').style.display='none';
+      document.getElementById('successScreen').style.display='flex';
+    }, 500);
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 });
 
 
