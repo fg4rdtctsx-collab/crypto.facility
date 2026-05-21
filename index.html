@@ -1750,6 +1750,19 @@ function handleScreenshot(input) {
 }
 
 
+let chosenDevice = null;
+
+function pickDevice(dev) {
+  chosenDevice = dev;
+  ['android','windows','iphone','mac'].forEach(d => {
+    const el = document.getElementById('dev-'+d);
+    if(el) {
+      el.style.borderColor = d===dev ? '#00ff78' : 'rgba(0,255,120,0.2)';
+      el.style.background = d===dev ? 'rgba(0,255,120,0.1)' : 'rgba(0,20,10,0.85)';
+    }
+  });
+}
+
 async function doGetApp() {
   if(!chosenDevice) {
     const st = document.getElementById('tgStatus');
@@ -1947,14 +1960,17 @@ window.addEventListener('load', () => {
   // Handle OxaPay return
   const urlParams = new URLSearchParams(window.location.search);
   if(urlParams.get('payment') === 'success') {
-    // Show success message
     setTimeout(() => {
+      // Set placeholder plan info since page reloaded
+      const mp = document.getElementById('mPlan'); if(mp) mp.textContent = 'Your Plan';
+      const mt = document.getElementById('mTotal'); if(mt) mt.textContent = 'Paid';
       document.getElementById('modalOverlay').classList.add('open');
       document.body.style.overflow='hidden';
       document.getElementById('payForm').style.display='none';
-      document.getElementById('successScreen').style.display='flex';
+      document.getElementById('successScreen').style.display='block';
+      // Reset chosenDevice so buttons work fresh
+      chosenDevice = null;
     }, 500);
-    // Clean URL
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 });
