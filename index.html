@@ -952,7 +952,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
     </div>
 
     <!-- PROMO -->
-    <div style="margin-bottom:14px">
+    <div style="margin-bottom:20px">
       <div style="font-size:11px;font-weight:700;color:#5a9a6a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Promo Code <span style="color:#3a6a4a;font-weight:400">(optional)</span></div>
       <div style="display:flex;gap:8px">
         <input id="promoInput" placeholder="Enter promo code" style="flex:1;background:rgba(0,30,15,0.9);border:1.5px solid rgba(0,255,120,0.2);border-radius:10px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#fff;outline:none"/>
@@ -961,81 +961,15 @@ footer .logo{justify-content:center;margin-bottom:14px}
       <div id="promoStatus" style="font-size:12px;font-weight:600;min-height:16px;margin-top:6px"></div>
     </div>
 
-    <!-- PAYMENT METHOD -->
-    <div style="font-size:11px;font-weight:700;color:#5a9a6a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px">Select payment method</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-      <div class="cm active" id="cm-btc" onclick="selectMethod('btc')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" class="cm-logo"/><div class="cm-info"><div class="cm-name">Bitcoin (BTC)</div><div class="cm-desc">BTC Network</div></div><div class="cm-radio"></div></div>
-      <div class="cm" id="cm-usdt" onclick="selectMethod('usdt')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzYuNCAxOS4ySDI3LjZWMjVIMTh2NS4yaDkuNnYuOGMwIDUuMyAyIDkuNSA0LjQgOS41czQuNC00LjIgNC40LTkuNXYtLjhINDZWMjVIMzYuNHYtNS44em0wIDE2YzAgMy0yIDUuMy00LjQgNS4zUzI3LjYgMzguMiAyNy42IDM1LjJ2LS4yaDguOHYuMnoiIG9wYWNpdHk9IjAiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" class="cm-logo"/><div class="cm-info"><div class="cm-name">Tether (USDT)</div><div class="cm-desc">TRC-20 (Tron Network)</div></div><div class="cm-radio"></div></div>
-      <div class="cm" id="cm-eth" onclick="selectMethod('eth')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" class="cm-logo"/><div class="cm-info"><div class="cm-name">Ethereum (ETH)</div><div class="cm-desc">ETH Network</div></div><div class="cm-radio"></div></div>
-      <div class="cm" id="cm-sol" onclick="selectMethod('sol')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" class="cm-logo"/><div class="cm-info"><div class="cm-name">Solana (SOL)</div><div class="cm-desc">SOL Network</div></div><div class="cm-radio"></div></div>
+    <!-- OXAPAY BUTTON -->
+    <div style="text-align:center;padding:10px 0 6px">
+      <div style="font-size:13px;color:#5a9a6a;margin-bottom:16px">You will be redirected to a secure payment page to complete your purchase with crypto.</div>
+      <button id="oxaPayBtn" onclick="startOxaPay()" style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00aa55,#00ff78);color:#000;box-shadow:0 8px 30px rgba(0,255,120,0.35)">
+        💳 Pay with Crypto
+      </button>
+      <div id="oxaPayStatus" style="font-size:12px;color:#5a9a6a;margin-top:12px;min-height:16px"></div>
     </div>
-
-    <!-- ADDRESS PANELS -->
-    <div id="panel-btc" class="addr-panel show">
-      <div style="background:rgba(247,147,26,0.08);border:1px solid rgba(247,147,26,0.25);border-radius:14px;padding:14px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#7aab8a;font-weight:700;text-transform:uppercase">Live BTC</span><div style="display:flex;align-items:center;gap:5px"><div id="btc-dot" style="width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite"></div><span id="btc-price" style="font-size:13px;color:#fff;font-weight:700">...</span></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px"><span style="font-size:13px;color:#7aab8a">Send exactly</span><div style="text-align:right"><div id="btc-amt" style="font-size:18px;font-weight:800;color:#F7931A">...</div><div id="btc-usd" style="font-size:11px;color:#3a5a44">...</div></div></div>
-      </div>
-      <div style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.25);border-radius:10px;padding:10px;margin-bottom:12px;font-size:12px;color:#fbbf24;text-align:center">⚠️ Send the <b>exact amount</b>. Wrong amounts will be rejected.</div>
-      <div class="addr-box"><div class="addr-network">BTC Address</div><div class="addr-value" id="addr-btc">Loading...</div></div>
-      <button class="copy-btn" onclick="doCopy('addr-btc',this)">📋 Copy BTC Address</button>
-    </div>
-
-    <div id="panel-usdt" class="addr-panel">
-      <div style="background:rgba(38,161,123,0.08);border:1px solid rgba(38,161,123,0.25);border-radius:14px;padding:14px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#7aab8a;font-weight:700;text-transform:uppercase">USDT Rate</span><span style="font-size:13px;color:#fff;font-weight:700">1 USDT = $1.00</span></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px"><span style="font-size:13px;color:#7aab8a">Send exactly</span><div id="usdt-amt" style="font-size:18px;font-weight:800;color:#26A17B">...</div></div>
-      </div>
-      <div style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.25);border-radius:10px;padding:10px;margin-bottom:12px;font-size:12px;color:#fbbf24;text-align:center">⚠️ Send the <b>exact amount</b>. Wrong amounts will be rejected.</div>
-      <div class="addr-box"><div class="addr-network">USDT · TRC-20 (Tron)</div><div class="addr-value" id="addr-trc">Loading...</div></div>
-      <button class="copy-btn" onclick="doCopy('addr-trc',this)">📋 Copy TRC-20 Address</button>
-    </div>
-
-    <div id="panel-eth" class="addr-panel">
-      <div style="background:rgba(98,126,234,0.08);border:1px solid rgba(98,126,234,0.25);border-radius:14px;padding:14px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#7aab8a;font-weight:700;text-transform:uppercase">Live ETH</span><div style="display:flex;align-items:center;gap:5px"><div id="eth-dot" style="width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite"></div><span id="eth-price" style="font-size:13px;color:#fff;font-weight:700">...</span></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px"><span style="font-size:13px;color:#7aab8a">Send exactly</span><div style="text-align:right"><div id="eth-amt" style="font-size:18px;font-weight:800;color:#627EEA">...</div><div id="eth-usd" style="font-size:11px;color:#3a5a44">...</div></div></div>
-      </div>
-      <div style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.25);border-radius:10px;padding:10px;margin-bottom:12px;font-size:12px;color:#fbbf24;text-align:center">⚠️ Send the <b>exact amount</b>. Wrong amounts will be rejected.</div>
-      <div class="addr-box"><div class="addr-network">ETH Address</div><div class="addr-value" id="addr-eth">Loading...</div></div>
-      <button class="copy-btn" onclick="doCopy('addr-eth',this)">📋 Copy ETH Address</button>
-    </div>
-
-    <div id="panel-sol" class="addr-panel">
-      <div style="background:rgba(153,69,255,0.08);border:1px solid rgba(153,69,255,0.25);border-radius:14px;padding:14px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#7aab8a;font-weight:700;text-transform:uppercase">Live SOL</span><div style="display:flex;align-items:center;gap:5px"><div id="sol-dot" style="width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite"></div><span id="sol-price" style="font-size:13px;color:#fff;font-weight:700">...</span></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px"><span style="font-size:13px;color:#7aab8a">Send exactly</span><div style="text-align:right"><div id="sol-amt" style="font-size:18px;font-weight:800;color:#9945FF">...</div><div id="sol-usd" style="font-size:11px;color:#3a5a44">...</div></div></div>
-      </div>
-      <div style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.25);border-radius:10px;padding:10px;margin-bottom:12px;font-size:12px;color:#fbbf24;text-align:center">⚠️ Send the <b>exact amount</b>. Wrong amounts will be rejected.</div>
-      <div class="addr-box"><div class="addr-network">SOL Address</div><div class="addr-value" id="addr-sol">Loading...</div></div>
-      <button class="copy-btn" onclick="doCopy('addr-sol',this)">📋 Copy SOL Address</button>
-    </div>
-
-    <!-- HASH VERIFY -->
-    <div style="margin-top:16px">
-      <div style="font-size:11px;font-weight:700;color:#5a9a6a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Transaction Hash <span style="color:#ef4444">*</span></div>
-      <input id="hashInput" placeholder="Paste TxID / Hash after sending" style="width:100%;background:rgba(0,30,15,0.9);border:1.5px solid rgba(0,255,120,0.2);border-radius:10px;padding:12px 14px;font-family:monospace;font-size:13px;color:#fff;outline:none;margin-bottom:8px"/>
-      <button id="hashBtn" onclick="doVerify()" style="width:100%;background:rgba(0,255,120,0.08);border:1.5px solid rgba(0,255,120,0.25);border-radius:10px;padding:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#00ff78;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px">🔍 Verify on Blockchain</button>
-      <div id="hashStatus" style="font-size:12px;font-weight:600;min-height:16px;text-align:center;margin-bottom:12px"></div>
-    </div>
-
-    <!-- SCREENSHOT OPTIONAL -->
-    <div style="margin-bottom:14px">
-      <div style="font-size:11px;font-weight:700;color:#5a9a6a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Screenshot <span style="color:#3a6a4a;font-weight:400">(optional)</span></div>
-      <div style="border:2px dashed rgba(0,255,120,0.2);border-radius:12px;padding:16px;text-align:center;cursor:pointer;position:relative;overflow:hidden">
-        <input type="file" accept="image/*" onchange="loadScreenshot(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"/>
-        <div style="font-size:22px;margin-bottom:4px">📸</div>
-        <div style="font-size:12px;color:#5a9a6a;font-weight:600">Tap to upload payment screenshot</div>
-      </div>
-      <div id="screenshotPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,255,120,0.2)">
-        <img id="screenshotImg" style="width:100%;max-height:150px;object-fit:cover;display:block"/>
-        <div style="font-size:11px;color:#00ff78;font-weight:700;padding:6px 10px;background:rgba(0,30,15,0.9)">✓ Screenshot uploaded</div>
-      </div>
-    </div>
-
-    <button id="confirmBtn" onclick="doConfirm()" disabled style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00aa55,#00ff78);color:#000;box-shadow:0 8px 30px rgba(0,255,120,0.35);transition:all 0.2s;opacity:0.35">⚡ Confirm &amp; Activate Plan</button>
   </div>
-
   <!-- SUCCESS -->
   <div id="successScreen" style="display:none;text-align:center;padding:10px 0">
     <div style="font-size:60px;margin-bottom:16px">🎉</div>
@@ -1323,52 +1257,49 @@ function toggleCoin(el,plan){
 
 // ═══ MODAL ═══
 let curPlan='',priceInterval=null,currentPlanPrice=200;
-async function openModal(plan,price,dur){
+function openModal(plan,price,dur){
   curPlan=plan;
   curPrice=parseInt((price+'').replace(/[^0-9]/g,''));
+  document.getElementById('mPlan').textContent=plan;
+  document.getElementById('mDur').textContent=dur;
+  document.getElementById('mTotal').textContent=price;
+  document.getElementById('mSub').textContent='Crypto Facility — '+plan+' Plan';
+  document.getElementById('payForm').style.display='block';
+  document.getElementById('successScreen').style.display='none';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('promoInput').value='';
+  document.getElementById('promoStatus').textContent='';
+  document.getElementById('oxaPayStatus').textContent='';
+}
+
+async function startOxaPay(){
+  const btn = document.getElementById('oxaPayBtn');
+  const st = document.getElementById('oxaPayStatus');
+  btn.disabled=true;
+  btn.textContent='⏳ Creating payment...';
+  st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
-
-  // Show a simple loading overlay — don't open modal yet
-  const loadDiv = document.createElement('div');
-  loadDiv.id = 'oxa-loading';
-  loadDiv.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
-  loadDiv.innerHTML = '<div style="font-size:40px;margin-bottom:16px">⏳</div><div style="color:#00ff78;font-size:18px;font-weight:700">Creating payment...</div><div style="color:#5a9a6a;font-size:13px;margin-top:8px">Please wait</div>';
-  document.body.appendChild(loadDiv);
-
-  try {
-    const res = await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/functions/v1/create-invoice', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'
-      },
-      body: JSON.stringify({ amount: curPrice, plan, method: 'crypto', device })
+  try{
+    const res=await fetch('https://vwsqgtcezwgyghvayniv.supabase.co/functions/v1/create-invoice',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'},
+      body:JSON.stringify({amount:curPrice,plan:curPlan,method:'crypto',device})
     });
-    const data = await res.json();
-    if(data.success && data.payLink) {
-      window.location.href = data.payLink;
-      return;
+    const data=await res.json();
+    if(data.success&&data.payLink){
+      st.textContent='Redirecting...';
+      window.location.href=data.payLink;
+    }else{
+      throw new Error('No payment link');
     }
-    throw new Error('No payLink returned');
-  } catch(e) {
-    console.error('OxaPay error:', e);
-    // Remove loading overlay and fall back to old modal
-    const ld = document.getElementById('oxa-loading');
-    if(ld) ld.remove();
-    document.getElementById('mPlan').textContent=plan;
-    document.getElementById('mDur').textContent=dur;
-    document.getElementById('mTotal').textContent=price;
-    document.getElementById('modalSub').textContent='Crypto Facility — '+plan+' Plan';
-    document.getElementById('payForm').style.display='block';
-    document.getElementById('successScreen').style.display='none';
-    document.getElementById('modalOverlay').classList.add('open');
-    document.body.style.overflow='hidden';
-    selectMethod('btc');
-    fetchAllPrices();
-    if(priceInterval)clearInterval(priceInterval);
-    priceInterval=setInterval(fetchAllPrices,30000);
+  }catch(e){
+    console.error('OxaPay error:',e);
+    btn.disabled=false;
+    btn.textContent='💳 Pay with Crypto';
+    st.style.color='#ef4444';
+    st.textContent='❌ Failed to create payment. Please try again.';
   }
 }
 function closeModal(){
