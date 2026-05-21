@@ -1290,6 +1290,8 @@ async function startOxaPay(){
     const data=await res.json();
     if(data.success&&data.payLink){
       st.textContent='Redirecting...';
+      localStorage.setItem('cf_plan', curPlan);
+      localStorage.setItem('cf_price', '$'+curPrice);
       window.location.href=data.payLink;
     }else{
       throw new Error('No payment link');
@@ -1309,15 +1311,8 @@ function closeModal(){
 }
 function bgClose(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
-// ═══ PAYMENT METHOD ═══
-function selectMethod(m){
-  ['btc','usdt','eth','sol'].forEach(x=>{
-    document.getElementById('cm-'+x).classList.remove('active');
-    document.getElementById('panel-'+x).classList.remove('show');
-  });
-  document.getElementById('cm-'+m).classList.add('active');
-  document.getElementById('panel-'+m).classList.add('show');
-}
+function selectMethod(m){ return; }
+
 function switchNet(tab,net){
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
   tab.classList.add('on');
@@ -1799,7 +1794,7 @@ async function doGetApp() {
     <div style="background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:#7aab8a;text-align:center;line-height:1.6">
       📋 Tap the button below — your order details will be <strong style="color:#00ff78">auto-copied</strong>. When chat opens just <strong style="color:#00ff78">paste and send!</strong>
     </div>
-    <button onclick="openChaportWithMsg()" style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00aa55,#00ff78);color:#000;box-shadow:0 8px 30px rgba(0,255,120,0.35);margin-bottom:10px">
+    <button id="chaportBtn" onclick="openChaportWithMsg()" style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00aa55,#00ff78);color:#000;box-shadow:0 8px 30px rgba(0,255,120,0.35);margin-bottom:10px">
       💬 Get My App via Live Chat
     </button>
     <button onclick="closeModal()" style="width:100%;border:none;border-radius:100px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;background:rgba(0,255,120,0.08);color:#7aab8a;cursor:pointer">Close</button>
@@ -1807,20 +1802,31 @@ async function doGetApp() {
 }
 
 function openChaportWithMsg() {
-  // Copy message to clipboard then open Chaport
+  // Copy message to clipboard
   if(window._chaportMsg) {
     navigator.clipboard.writeText(window._chaportMsg).catch(()=>{});
   }
-  if(window.chaport) {
-    window.chaport.q('open');
-  }
-  // Show copied notification
-  const btn = document.querySelector('[onclick="openChaportWithMsg()"]');
+  // Update button text
+  const btn = document.getElementById('chaportBtn');
   if(btn) {
-    const orig = btn.textContent;
-    btn.textContent = '✅ Message copied! Paste it in chat';
-    setTimeout(()=>btn.textContent=orig, 3000);
+    btn.textContent = '✅ Message copied! Opening chat...';
+    setTimeout(()=>{ btn.textContent = '💬 Get My App via Live Chat'; }, 3000);
   }
+  // Open Chaport - try all methods
+  setTimeout(() => {
+    try {
+      if(window.chaport && window.chaport.q) {
+        window.chaport.q('open');
+      } else if(window.chaport && window.chaport.open) {
+        window.chaport.open();
+      } else {
+        const bubble = document.querySelector('[class*="chaport-launcher"], [class*="chaport-container"] button');
+        if(bubble) bubble.click();
+      }
+    } catch(e) {
+      console.log('Chaport open error:', e);
+    }
+  }, 300);
 }
 
 // Price fetching
@@ -1962,8 +1968,12 @@ window.addEventListener('load', () => {
   if(urlParams.get('payment') === 'success') {
     setTimeout(() => {
       // Set placeholder plan info since page reloaded
-      const mp = document.getElementById('mPlan'); if(mp) mp.textContent = 'Your Plan';
-      const mt = document.getElementById('mTotal'); if(mt) mt.textContent = 'Paid';
+      const savedPlan = localStorage.getItem('cf_plan') || 'Your Plan';
+      const savedPrice = localStorage.getItem('cf_price') || 'Paid';
+      const mp = document.getElementById('mPlan'); if(mp) mp.textContent = savedPlan;
+      const mt = document.getElementById('mTotal'); if(mt) mt.textContent = savedPrice;
+      localStorage.removeItem('cf_plan');
+      localStorage.removeItem('cf_price');
       document.getElementById('modalOverlay').classList.add('open');
       document.body.style.overflow='hidden';
       document.getElementById('payForm').style.display='none';
