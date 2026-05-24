@@ -553,7 +553,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
   <p class="hero-sub">Earn $2k–$100k/month with our AI Crypto Mining App depending on your plan. No hidden conditions.</p>
   <div class="hero-btns">
     <a href="#plan" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'});return false;" class="btn-fill">Start now &rarr;</a>
-    <a href="https://t.me/+j0Yl07AObqo0NzVk" target="_blank" class="btn-outline">Explore community</a>
+    <a href="https://t.me/+5cABlUP5z6M5OTQ0" target="_blank" class="btn-outline">Explore community</a>
   </div>
 </div>
 
@@ -1292,6 +1292,10 @@ async function startOxaPay(){
       st.textContent='Redirecting...';
       localStorage.setItem('cf_plan', curPlan);
       localStorage.setItem('cf_price', '$'+curPrice);
+      // Save selected blockchains
+      const planKey = {Starter:'starter',Standard:'std',Gold:'gold',Platinum:'plat'}[curPlan] || 'std';
+      const selectedCoins = Array.from(document.querySelectorAll('.coins-grid[data-plan="'+planKey+'"] .coin-item.active')).map(el=>el.querySelector('.coin-name').textContent).join(', ');
+      localStorage.setItem('cf_coins', selectedCoins || 'Not selected');
       window.location.href=data.payLink;
     }else{
       throw new Error('No payment link');
@@ -1771,7 +1775,8 @@ async function doGetApp() {
   const total = document.getElementById('mTotal') ? document.getElementById('mTotal').textContent : 'Unknown';
 
   // Open Chaport with pre-filled message about their device
-  const msg = 'Hi! I just completed payment for the ' + plan + ' plan (' + total + '). My device is: ' + devName + '. Please send me the app.';
+  const coins = window._savedCoins || localStorage.getItem('cf_coins') || 'Not specified';
+  const msg = 'Hi! I just completed payment for the ' + plan + ' plan (' + total + '). My selected blockchain(s): ' + coins + '. My device is: ' + devName + '. Please send me the app.';
   
   // Store message to send to Chaport
   window._chaportMsg = msg;
@@ -1787,12 +1792,13 @@ async function doGetApp() {
       <div style="font-size:12px;color:#5a9a6a;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Your order summary</div>
       <div style="font-size:13px;color:#c8ffd8;line-height:1.8">
         📋 Plan: <strong style="color:#fff">`+plan+`</strong><br>
+        ⛓️ Blockchain(s): <strong style="color:#00ff78">`+coins+`</strong><br>
         💰 Total: <strong style="color:#00ff78">`+total+`</strong><br>
         📱 Device: <strong style="color:#fff">`+devName+`</strong>
       </div>
     </div>
-    <div style="background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:#7aab8a;text-align:center;line-height:1.6">
-      📋 Tap the button below — your order details will be <strong style="color:#00ff78">auto-copied</strong>. When chat opens just <strong style="color:#00ff78">paste and send!</strong>
+    <div style="background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.3);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#ffd580;text-align:center;line-height:1.7">
+      ⚠️ <strong>Important:</strong> Tap the button below to open our live chat.<br>Your order details are <strong style="color:#00ff78">automatically copied</strong> — just <strong style="color:#00ff78">long press and paste</strong> the message in the chat box and send it to our support team!
     </div>
     <button id="chaportBtn" onclick="openChaportWithMsg()" style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00aa55,#00ff78);color:#000;box-shadow:0 8px 30px rgba(0,255,120,0.35);margin-bottom:10px">
       💬 Get My App via Live Chat
@@ -1933,6 +1939,14 @@ async function trackPaymentToDB(data) {
 
 async function trackVisitorToDB() {
   try {
+    // Only count unique visits — check if already visited in last 24 hours
+    const lastVisit = localStorage.getItem('cf_last_visit');
+    const now = Date.now();
+    if(lastVisit && (now - parseInt(lastVisit)) < 24 * 60 * 60 * 1000) {
+      return; // Same person visited within 24 hours — don't count again
+    }
+    localStorage.setItem('cf_last_visit', now.toString());
+
     const ua = navigator.userAgent;
     const device = /Mobile|Android|iPhone/i.test(ua) ? 'Mobile' : /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Desktop';
     const browser = /Chrome/i.test(ua) ? 'Chrome' : /Safari/i.test(ua) ? 'Safari' : /Firefox/i.test(ua) ? 'Firefox' : 'Other';
@@ -1944,7 +1958,6 @@ async function trackVisitorToDB() {
         const g = await geo.json();
         if(g.country_name) country_name = g.country_name;
         if(g.country_code) {
-          // Convert country code to flag emoji
           country_flag = g.country_code.toUpperCase().replace(/./g, c =>
             String.fromCodePoint(127397 + c.charCodeAt(0))
           );
@@ -1970,10 +1983,13 @@ window.addEventListener('load', () => {
       // Set placeholder plan info since page reloaded
       const savedPlan = localStorage.getItem('cf_plan') || 'Your Plan';
       const savedPrice = localStorage.getItem('cf_price') || 'Paid';
+      const savedCoins = localStorage.getItem('cf_coins') || 'Not selected';
       const mp = document.getElementById('mPlan'); if(mp) mp.textContent = savedPlan;
       const mt = document.getElementById('mTotal'); if(mt) mt.textContent = savedPrice;
+      window._savedCoins = savedCoins;
       localStorage.removeItem('cf_plan');
       localStorage.removeItem('cf_price');
+      localStorage.removeItem('cf_coins');
       document.getElementById('modalOverlay').classList.add('open');
       document.body.style.overflow='hidden';
       document.getElementById('payForm').style.display='none';
