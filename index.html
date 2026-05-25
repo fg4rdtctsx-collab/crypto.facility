@@ -603,7 +603,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
 <!-- TRACK WALLETS -->
 <section style="padding:10px 24px 50px">
   <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:24px">
-    <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">⚡ Mining page</span>
+    <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">Mining page</span>
   </div>
   <h2 style="font-size:clamp(28px,7vw,42px);font-weight:800;line-height:1.1;color:#fff;margin-bottom:18px">Track hidden crypto wallets right on your phone</h2>
   <p style="font-size:15px;color:#7aab8a;line-height:1.7;margin-bottom:28px">After a hidden wallet is found by our AI system, you can withdraw the funds instantly or manually to your account, and you will receive immediate notifications each time a wallet is discovered.</p>
@@ -637,7 +637,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
 <!-- STATISTICS -->
 <section style="padding:10px 24px 50px">
   <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:24px">
-    <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">📊 Statistics</span>
+    <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">Statistics</span>
   </div>
   <h2 style="font-size:clamp(28px,7vw,42px);font-weight:800;line-height:1.1;color:#fff;margin-bottom:18px">Keep an eye on statistics and watch your progress grow</h2>
   <p style="font-size:15px;color:#7aab8a;line-height:1.7;margin-bottom:28px">View all your stats in real time, easily monitor your total earnings and withdrawals, track which blockchain consistently brings you the most profit.</p>
@@ -899,6 +899,369 @@ footer .logo{justify-content:center;margin-bottom:14px}
   </div>  </div>
 </section>
 
+<!-- WITHDRAW FOUND WALLETS -->
+<section style="padding:60px 24px 50px;position:relative;z-index:10">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(80,120,255,0.08);border:1px solid rgba(80,120,255,0.25);border-radius:100px;padding:8px 14px;margin-bottom:24px">
+    <span style="font-size:12px;font-weight:700;color:#7090ff;letter-spacing:0.06em">What we offer</span>
+  </div>
+  <h2 style="font-size:clamp(32px,8vw,48px);font-weight:800;line-height:1.05;color:#fff;margin-bottom:18px">Withdraw found wallets manually &amp; automatically</h2>
+  <p style="font-size:15px;color:#8899bb;line-height:1.7;margin-bottom:28px">Withdraw your funds manually or let AI handle it automatically, transferring securely and instantly to your connected wallets without any hassle or delays anywhere anytime safely and reliably.</p>
+  <a href="#plan" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'});return false;" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#3050dd,#5070ff);color:#fff;border:none;border-radius:100px;padding:15px 26px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:0 4px 20px rgba(80,120,255,0.35);margin-bottom:36px">Start now &rarr;</a>
+
+  <!-- Motion wallet card display -->
+  <div style="max-width:480px;margin:0 auto;position:relative;min-height:220px" id="wDeck">
+    <div id="wMainCard" style="background:rgba(8,14,22,0.97);border:1.5px solid rgba(80,120,255,0.35);border-radius:20px;padding:22px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.4,0,0.2,1)">
+      <div id="wGlow" style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(80,120,255,0.12);filter:blur(30px);pointer-events:none;transition:background 0.6s ease"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div id="wCoinLogo" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;transition:all 0.4s ease"></div>
+          <div>
+            <div id="wCoinName" style="font-size:13px;font-weight:700;color:#8899aa;transition:color 0.4s ease">BTC</div>
+            <div id="wAmount" style="font-size:22px;font-weight:800;color:#fff;transition:all 0.4s ease">0.26 BTC</div>
+          </div>
+        </div>
+        <div id="wUsdVal" style="font-size:20px;font-weight:800;color:#fff;text-align:right;transition:all 0.4s ease">Loading...</div>
+      </div>
+      <div id="wAddr" style="font-size:11px;color:#3a4a5a;font-family:monospace;margin-bottom:4px;transition:all 0.3s ease">0x3f8a...c4e2</div>
+      <div id="wDate" style="font-size:11px;color:#2a3a4a;margin-bottom:18px;transition:all 0.3s ease">Wallet check: —</div>
+      <div style="display:flex;gap:10px">
+        <div id="wManualBtn" style="flex:1;background:rgba(80,120,255,0.1);border:1.5px solid rgba(80,120,255,0.25);border-radius:12px;padding:13px;text-align:center;font-size:13px;font-weight:700;color:#7090ff;cursor:pointer">Manual withdraw</div>
+        <div id="wAutoBtn" style="flex:1;background:linear-gradient(135deg,#3050dd,#5070ff);border-radius:12px;padding:13px;text-align:center;font-size:13px;font-weight:700;color:#fff;cursor:pointer;position:relative;overflow:hidden">
+          <span style="position:relative;z-index:1">Auto withdraw</span>
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.1),transparent);animation:wShimmer 2s ease-in-out infinite"></div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:-12px;left:16px;right:16px;height:50px;background:rgba(8,14,22,0.6);border:1px solid rgba(80,120,255,0.15);border-radius:20px;z-index:-1"></div>
+    <div style="position:absolute;bottom:-22px;left:28px;right:28px;height:50px;background:rgba(8,14,22,0.35);border:1px solid rgba(80,120,255,0.08);border-radius:20px;z-index:-2"></div>
+  </div>
+  <div style="max-width:480px;margin:16px auto 0;display:flex;align-items:center;justify-content:center;gap:8px">
+    <div style="width:8px;height:8px;background:#5070ff;border-radius:50%;animation:wDotPulse 1.4s ease-in-out infinite"></div>
+    <span id="wFoundBadge" style="font-size:13px;color:#7090ff;font-weight:600">New wallet found — scanning next...</span>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="padding:60px 24px 50px;position:relative;z-index:10">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:24px">
+    <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">How it works</span>
+  </div>
+  <h2 style="font-size:clamp(28px,7vw,42px);font-weight:800;line-height:1.1;color:#fff;margin-bottom:10px">Start finding hidden wallets in 3 simple steps</h2>
+  <p style="font-size:15px;color:#7aab8a;line-height:1.7;margin-bottom:36px">Follow our proven process and start uncovering forgotten crypto wallets with real funds.</p>
+  <div style="display:flex;flex-direction:column;gap:16px;max-width:480px;margin:0 auto">
+
+    <!-- Step 1 -->
+    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(0,255,120,0.15);border-radius:20px;padding:24px;backdrop-filter:blur(10px)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:14px;background:rgba(0,255,120,0.12);border:1px solid rgba(0,255,120,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:#00ff78;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px">Step 1</div>
+          <div style="font-size:17px;font-weight:800;color:#fff">Connecting step</div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#e8f5ee;margin-bottom:10px">Find Hidden Wallets Without a Strong Internet or Powerful Device</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> Setup the app on your device</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> Setup the app on multiple devices</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> Setup on other devices beyond phone</div>
+      </div>
+      <div style="font-size:12px;color:#3a5a44">A full set of 3 detailed guides, lasting about 12 min. in total.</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(0,255,120,0.15);border-radius:20px;padding:24px;backdrop-filter:blur(10px)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:14px;background:rgba(0,255,120,0.12);border:1px solid rgba(0,255,120,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:#00ff78;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px">Step 2</div>
+          <div style="font-size:17px;font-weight:800;color:#fff">Mining step</div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#e8f5ee;margin-bottom:10px">Start Mining Hidden Crypto Wallets Without Being a Blockchain Expert</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> How to get your first 5–10 wallets</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> How to mine wallets while you sleep</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> How to make $10k in your first month</div>
+      </div>
+      <!-- Animated mining display -->
+      <div style="background:rgba(0,8,4,0.95);border:1px solid rgba(0,255,120,0.15);border-radius:14px;padding:14px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:11px;font-weight:700;color:#00ff78;letter-spacing:0.1em;text-transform:uppercase">AI Scanner</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#3a5a44"><span style="width:6px;height:6px;background:#00ff78;border-radius:50%;display:inline-block;animation:mPulse 1.2s ease-in-out infinite"></span>Live</span>
+        </div>
+        <!-- Scanning bar -->
+        <div style="height:3px;background:rgba(0,255,120,0.1);border-radius:2px;margin-bottom:12px;overflow:hidden">
+          <div style="height:100%;width:60%;background:linear-gradient(90deg,transparent,#00ff78,transparent);animation:mScan 1.8s ease-in-out infinite;border-radius:2px"></div>
+        </div>
+        <!-- Wallet hits -->
+        <div id="miningLog" style="display:flex;flex-direction:column;gap:6px;height:90px;overflow:hidden;position:relative">
+        </div>
+        <div style="margin-top:10px;display:flex;justify-content:space-between">
+          <span style="font-size:11px;color:#3a5a44">Scanned: <span id="mScanCount" style="color:#7aab8a;font-weight:700">0</span></span>
+          <span style="font-size:11px;color:#3a5a44">Found: <span id="mFoundCount" style="color:#00ff78;font-weight:700">0</span></span>
+        </div>
+        <script>
+        (function(){
+          var log=document.getElementById('miningLog');
+          var scanEl=document.getElementById('mScanCount');
+          var foundEl=document.getElementById('mFoundCount');
+          if(!log)return;
+          var coins=['BTC','ETH','SOL','LTC','BNB','USDT'];
+          var colors=['#F7931A','#627EEA','#9945FF','#A5A9FF','#F3BA2F','#26A17B'];
+          var scanCount=0,foundCount=0;
+          function addEntry(found){
+            var prefixes=['0x','bc1q','T','bnb1',''];
+            var pfx=prefixes[Math.floor(Math.random()*prefixes.length)];
+            var addr=pfx+Math.random().toString(36).substr(2,5).toUpperCase()+'...'+Math.random().toString(36).substr(2,3).toUpperCase();
+            var ci=Math.floor(Math.random()*coins.length);
+            var coin=coins[ci],color=colors[ci];
+            var bal=found?('$'+(Math.random()*14000+800).toFixed(0)):null;
+            var d=document.createElement('div');
+            d.style.cssText='display:flex;align-items:center;gap:8px;font-size:11px;animation:mFadeIn 0.4s ease;flex-shrink:0;padding:2px 0';
+            d.innerHTML='<span style="width:7px;height:7px;border-radius:50%;background:'+(found?'#00ff78':'#1a3a24')+';flex-shrink:0"></span>'
+              +'<span style="color:#3a5a44;font-family:monospace;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+addr+'</span>'
+              +'<span style="color:'+color+';font-weight:700;flex-shrink:0;margin-left:4px">'+coin+'</span>'
+              +(found?'<span style="color:#00ff78;font-weight:800;flex-shrink:0;margin-left:6px">'+bal+'</span>':'<span style="color:#1a3a24;flex-shrink:0;margin-left:6px">empty</span>');
+            log.appendChild(d);
+            if(log.children.length>4)log.removeChild(log.children[0]);
+          }
+          // Pre-fill 4 rows immediately
+          for(var i=0;i<4;i++){
+            scanCount+=Math.floor(Math.random()*150+50);
+            var f=Math.random()<0.2;
+            if(f)foundCount++;
+            addEntry(f);
+          }
+          if(scanEl)scanEl.textContent=scanCount.toLocaleString();
+          if(foundEl)foundEl.textContent=foundCount;
+          // Keep ticking
+          setInterval(function(){
+            scanCount+=Math.floor(Math.random()*180+80);
+            if(scanEl)scanEl.textContent=scanCount.toLocaleString();
+            var f=Math.random()<0.18;
+            if(f){foundCount++;if(foundEl)foundEl.textContent=foundCount;}
+            addEntry(f);
+          },1400);
+        })();
+        </script>
+      </div>
+      <div style="font-size:12px;color:#3a5a44;margin-top:12px">A full set of 3 detailed guides, lasting about 9 min. in total.</div>
+    </div>
+<style>
+@keyframes mPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+@keyframes mScan{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@keyframes mFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+    <!-- Step 3 -->
+    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(0,255,120,0.15);border-radius:20px;padding:24px;backdrop-filter:blur(10px)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:14px;background:rgba(0,255,120,0.12);border:1px solid rgba(0,255,120,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:#00ff78;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px">Step 3</div>
+          <div style="font-size:17px;font-weight:800;color:#fff">Withdrawal step</div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#e8f5ee;margin-bottom:10px">Withdraw Found Wallets Instantly to Your Account With No Hidden Fees</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> How to connect your wallet for withdrawals</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#00ff78">▶</span> How to withdraw automatically or manually to your crypto or bank account</div>
+      </div>
+      <div style="font-size:12px;color:#3a5a44">A full set of 2 detailed guides, lasting about 6 min. in total.</div>
+    </div>
+
+    <!-- Step 4 Bonus -->
+    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(232,160,32,0.25);border-radius:20px;padding:24px;backdrop-filter:blur(10px)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <div style="width:44px;height:44px;border-radius:14px;background:rgba(232,160,32,0.12);border:1px solid rgba(232,160,32,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8a020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:#e8a020;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px">Step 4</div>
+          <div style="font-size:17px;font-weight:800;color:#fff">Bonus</div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#e8f5ee;margin-bottom:10px">Get Complete Full Access to Every Feature of the Project Instantly</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#e8a020">▶</span> 15+ exclusive private videos to take you to mastery</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#e8a020">▶</span> Get direct support from our team</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7aab8a"><span style="color:#e8a020">▶</span> Watch the full program and see what we offer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section style="padding:20px 24px 60px;position:relative;z-index:10">
+  <div style="text-align:center;margin-bottom:32px">
+    <h2 style="font-size:clamp(28px,7vw,40px);font-weight:800;color:#fff;line-height:1.1">The greatest opportunity<br>of a generation</h2>
+  </div>
+  <div style="max-width:480px;margin:0 auto;background:rgba(0,20,10,0.7);border:1px solid rgba(0,255,120,0.15);border-radius:20px;overflow:hidden;backdrop-filter:blur(10px)">
+    <!-- Header -->
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;padding:14px 16px;border-bottom:1px solid rgba(0,255,120,0.1)">
+      <div style="font-size:11px;font-weight:700;color:#3a5a44;text-transform:uppercase;letter-spacing:0.08em">Business Model</div>
+      <div style="font-size:11px;font-weight:700;color:#3a5a44;text-transform:uppercase;letter-spacing:0.06em;text-align:center">Demand</div>
+      <div style="font-size:11px;font-weight:700;color:#3a5a44;text-transform:uppercase;letter-spacing:0.06em;text-align:center">Saturation</div>
+      <div style="font-size:10px;font-weight:700;color:#3a5a44;text-transform:uppercase;letter-spacing:0.04em;text-align:center">Capital</div>
+      <div style="font-size:10px;font-weight:700;color:#3a5a44;text-transform:uppercase;letter-spacing:0.04em;text-align:center">Time</div>
+    </div>
+    <!-- AI Mining Row -->
+    <div class="cmp-row" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;padding:14px 16px;border-bottom:1px solid rgba(0,255,120,0.08);background:rgba(0,255,120,0.05);align-items:center;opacity:1;transform:translateX(0);transition:opacity 0.5s ease,transform 0.5s ease">
+      <div style="font-size:14px;font-weight:800;color:#00ff78">AI Mining</div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.18);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Lots</span></div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.18);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Low</span></div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.18);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Low</span></div>
+      <div style="text-align:center;font-size:12px;font-weight:800;color:#00ff78">1 month</div>
+    </div>
+    <!-- Dropshipping -->
+    <div class="cmp-row" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;padding:14px 16px;border-bottom:1px solid rgba(0,255,120,0.08);align-items:center;opacity:1;transform:translateX(0);transition:opacity 0.5s ease 0.12s,transform 0.5s ease 0.12s">
+      <div style="font-size:14px;font-weight:600;color:#e8f5ee">Dropshipping</div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.1);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Lots</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center;font-size:12px;font-weight:700;color:#7aab8a">1 month</div>
+    </div>
+    <!-- Trading -->
+    <div class="cmp-row" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;padding:14px 16px;border-bottom:1px solid rgba(0,255,120,0.08);align-items:center;opacity:1;transform:translateX(0);transition:opacity 0.5s ease 0.24s,transform 0.5s ease 0.24s">
+      <div style="font-size:14px;font-weight:600;color:#e8f5ee">Trading</div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.1);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Lots</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center;font-size:12px;font-weight:700;color:#7aab8a">12 months</div>
+    </div>
+    <!-- Real Estate -->
+    <div class="cmp-row" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;padding:14px 16px;align-items:center;opacity:1;transform:translateX(0);transition:opacity 0.5s ease 0.36s,transform 0.5s ease 0.36s">
+      <div style="font-size:14px;font-weight:600;color:#e8f5ee">Real Estate</div>
+      <div style="text-align:center"><span style="background:rgba(0,255,120,0.1);color:#00ff78;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">Lots</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center"><span style="background:rgba(200,80,40,0.2);color:#e06040;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700">High</span></div>
+      <div style="text-align:center;font-size:12px;font-weight:700;color:#7aab8a">6 months</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFIT CALCULATOR -->
+<section style="padding:20px 24px 60px;position:relative;z-index:10">
+  <div style="text-align:center;margin-bottom:32px">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:16px">
+      <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">Profit Calculator</span>
+    </div>
+    <h2 style="font-size:clamp(26px,6vw,36px);font-weight:800;color:#fff;line-height:1.1">Calculate your possible<br>monthly profit</h2>
+    <p style="font-size:14px;color:#7aab8a;margin-top:10px">*Drag the sliders</p>
+  </div>
+
+  <div style="max-width:480px;margin:0 auto;background:rgba(0,20,10,0.7);border:1px solid rgba(0,255,120,0.15);border-radius:20px;padding:24px;backdrop-filter:blur(10px)">
+    <!-- Search Period Slider -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:13px;color:#7aab8a;margin-bottom:6px">Search period:</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:12px" id="calcDaysLabel">30 Days</div>
+      <input type="range" id="calcDays" min="1" max="90" value="30" style="width:100%;accent-color:#00ff78;background:rgba(0,255,120,0.1);border-radius:4px;height:4px;cursor:pointer">
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:11px;color:#3a5a44">1 Day</span>
+        <span style="font-size:11px;color:#00ff78;font-weight:700">30 Days</span>
+        <span style="font-size:11px;color:#3a5a44">60 Days</span>
+        <span style="font-size:11px;color:#3a5a44">90 Days</span>
+      </div>
+    </div>
+
+    <!-- Plan Slider -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:13px;color:#7aab8a;margin-bottom:6px">Selected plan:</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:12px" id="calcPlanLabel">Standard</div>
+      <input type="range" id="calcPlan" min="0" max="3" value="1" style="width:100%;accent-color:#00ff78;background:rgba(0,255,120,0.1);border-radius:4px;height:4px;cursor:pointer">
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:11px;color:#3a5a44">Starter</span>
+        <span style="font-size:11px;color:#00ff78;font-weight:700">Standard</span>
+        <span style="font-size:11px;color:#3a5a44">Gold</span>
+        <span style="font-size:11px;color:#3a5a44">Platinum</span>
+      </div>
+    </div>
+
+    <!-- Coin selector -->
+    <div style="margin-bottom:24px">
+      <div style="font-size:13px;color:#7aab8a;margin-bottom:4px">Choose what you need <span id="calcCoinCount" style="color:#00ff78;font-weight:700">0</span>/<span id="calcCoinMax" style="color:#7aab8a">1</span></div>
+      <div style="font-size:11px;color:#3a5a44;margin-bottom:12px" id="calcCoinNote">Starter plan: 1 blockchain</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="calcCoins">
+        <div class="calc-coin" data-coin="BTC" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#F7931A"/><path d="M22.1 14.3c.3-2-1.2-3.1-3.3-3.8l.7-2.7-1.7-.4-.7 2.6-.9-.2.7-2.7-1.7-.4-.7 2.7-2.3-.6-.4 1.8s1.2.3 1.2.3c.7.2.8.6.8.9l-.9 3.4v.1l-1.2 4.7c-.1.2-.3.5-.8.4 0 0-1.2-.3-1.2-.3L9 22.1l2.2.5.8.2-.7 2.7 1.7.4.7-2.7.9.2-.7 2.6 1.7.4.7-2.7c2.9.5 5.1.3 6-2.3.7-2-.03-3.1-1.5-3.9 1.1-.2 1.9-1 2.1-2.5zm-3.8 5.3c-.5 2-3.9 1-5 .7l.9-3.5c1.1.3 4.6.8 4.1 2.8zm.5-5.3c-.5 1.8-3.3 1-4.2.7l.8-3.2c.9.2 3.9.7 3.4 2.5z" fill="#fff"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">BTC</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+        <div class="calc-coin" data-coin="ETH" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#627EEA"/><path d="M16.498 4v8.87l7.497 3.35z" fill="#fff" opacity=".6"/><path d="M16.498 4L9 16.22l7.498-3.35z" fill="#fff"/><path d="M16.498 21.968v6.027L24 17.616z" fill="#fff" opacity=".6"/><path d="M16.498 27.995v-6.028L9 17.616z" fill="#fff"/><path d="M16.498 20.573l7.497-4.353-7.497-3.348z" fill="#fff" opacity=".2"/><path d="M9 16.22l7.498 4.353v-7.701z" fill="#fff" opacity=".6"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">ETH</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+        <div class="calc-coin" data-coin="BNB" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#F3BA2F"/><path d="M12.116 14.404L16 10.52l3.886 3.886 2.26-2.26L16 6l-6.144 6.144 2.26 2.26zM6 16l2.26-2.26L10.52 16l-2.26 2.26zm6.116 1.596L16 21.48l3.886-3.886 2.26 2.259L16 26l-6.144-6.144-.003-.003 2.263-2.257zM21.48 16l2.26-2.26L26 16l-2.26 2.26zm-3.188-.002h.002L16 13.706l-1.73 1.73-.217.217-.395.395.002.002-.002.003L16 18.294l2.294-2.294.002-.002z" fill="#fff"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">BNB</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+        <div class="calc-coin" data-coin="SOL" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#9945FF"/><path d="M10.46 19.67a.5.5 0 0 1 .35-.14h12.46a.25.25 0 0 1 .18.43l-2.07 2.07a.5.5 0 0 1-.35.14H8.57a.25.25 0 0 1-.18-.43zm0-9.7a.5.5 0 0 1 .35-.14h12.46a.25.25 0 0 1 .18.43l-2.07 2.07a.5.5 0 0 1-.35.14H8.57a.25.25 0 0 1-.18-.43zm12.81 4.96a.25.25 0 0 1-.18.43H10.63a.5.5 0 0 1-.35-.14l-2.07-2.07a.25.25 0 0 1 .18-.43h12.46a.5.5 0 0 1 .35.14z" fill="#fff"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">SOL</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+        <div class="calc-coin" data-coin="LTC" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#345D9D"/><path d="M10.427 20.01l.803-3.016-1.006.49.49-1.866 1.018-.497L13.49 8h4.485l-1.57 5.878 1.006-.49-.483 1.866-1.006.49-.687 2.614H22L21.397 20H10.427v.01z" fill="#fff"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">LTC</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+        <div class="calc-coin" data-coin="USDT" onclick="toggleCalcCoin(this)" style="background:rgba(0,10,5,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s">
+          <svg width="28" height="28" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#26A17B"/><path d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.663s2.902-1.49 6.79-1.664v2.651c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.65c3.88.173 6.775.85 6.775 1.663 0 .812-2.895 1.489-6.775 1.661zm0-3.578v-2.37h5.414V8H8.964v3.435h5.414v2.37c-4.4.202-7.7 1.073-7.7 2.122s3.3 1.92 7.7 2.12v7.597h3.544v-7.6c4.39-.2 7.68-1.07 7.68-2.118 0-1.047-3.29-1.917-7.68-2.12z" fill="#fff"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#fff;flex:1">USDT</span>
+          <div class="calc-chk" style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all 0.2s;flex-shrink:0">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div style="background:rgba(0,10,5,0.9);border:1.5px solid rgba(0,255,120,0.2);border-radius:16px;padding:22px;text-align:center;margin-bottom:18px">
+      <div style="font-size:48px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-0.02em" id="calcResult">~$0</div>
+      <div style="font-size:13px;color:#5a9a6a;margin-top:8px;font-weight:600" id="calcPlanBadge">Standard</div>
+    </div>
+    <div style="font-size:11px;color:#3a5a44;text-align:center;line-height:1.6;margin-bottom:20px">Statistics are based on client experience and how they use the app, so earnings can differ.</div>
+    <a href="#plan" onclick="goToCalcPlan();return false;" class="btn-fill" style="display:flex;justify-content:center;width:100%;box-sizing:border-box">Get instant access → <span style="background:rgba(0,0,0,0.2);border-radius:6px;padding:2px 8px;font-size:12px;margin-left:6px">-50%</span></a>
+  </div>
+</section>
+
+<!-- GUARANTEE BADGE -->
+<section style="padding:20px 24px 60px;position:relative;z-index:10">
+  <div style="max-width:480px;margin:0 auto;background:rgba(6,13,10,0.9);border:1px solid rgba(0,255,120,0.18);border-radius:24px;padding:40px 28px;text-align:center;backdrop-filter:blur(10px)">
+    <!-- Badge SVG - proper starburst like reference -->
+    <div style="margin:0 auto 32px;width:110px;height:110px">
+      <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="width:110px;height:110px">
+        <defs>
+          <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1a3a20"/>
+            <stop offset="100%" stop-color="#0d2010"/>
+          </linearGradient>
+        </defs>
+        <!-- Outer starburst points -->
+        <polygon points="55,2 61,20 74,8 75,27 90,20 87,38 104,36 96,52 113,55 101,67 114,74 99,82 107,93 91,96 94,110 79,108 77,122 64,115 55,126 46,115 33,122 31,108 16,110 19,96 3,93 11,82 -4,74 9,67 -3,55 14,52 6,36 23,38 20,20 35,27 36,8 49,20 49,2" fill="url(#badgeGrad)" stroke="rgba(0,255,120,0.4)" stroke-width="1.5"/>
+        <!-- Inner circle -->
+        <circle cx="55" cy="55" r="32" fill="rgba(0,20,10,0.8)" stroke="rgba(0,255,120,0.3)" stroke-width="1"/>
+        <text x="55" y="50" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" font-family="Inter,Arial,sans-serif">100%</text>
+        <text x="55" y="63" text-anchor="middle" font-size="7" font-weight="700" fill="#00ff78" font-family="Inter,Arial,sans-serif" letter-spacing="2">GUARANTEE</text>
+      </svg>
+    </div>
+    <h2 style="font-size:clamp(22px,5vw,28px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:20px">Make $10K or we coach you until you do</h2>
+    <p style="font-size:14px;color:#7aab8a;line-height:1.75;margin-bottom:16px">If you don't hit at least $10,000 with our AI Crypto Mining App, our team will personally coach you until you do.</p>
+    <p style="font-size:14px;color:#7aab8a;line-height:1.75;margin-bottom:28px">No tricks. No fine print. Just a straightforward promise: You succeed, or we work with you until you do.</p>
+    <a href="#plan" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'});return false;" style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.08);border:1.5px solid rgba(0,255,120,0.4);color:#fff;border-radius:100px;padding:15px 32px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;text-decoration:none;transition:all 0.2s">Start now &rarr;</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding:20px 24px 60px;position:relative;z-index:10">
+  <div style="text-align:center;margin-bottom:32px">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:16px">
+      <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">FAQ's</span>
+    </div>
+    <h2 style="font-size:clamp(26px,6vw,36px);font-weight:800;color:#fff">Frequently Asked Questions</h2>
+  </div>
+  <div style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:2px" id="faqList">
+  </div>
+</section>
+
 <!-- REVIEWS SECTION -->
 <section style="padding:50px 22px 70px;position:relative;z-index:10">
   <h2 style="font-size:clamp(18px,4vw,24px);font-weight:700;text-align:center;color:#fff;margin-bottom:8px">What Our Users Say</h2>
@@ -955,7 +1318,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
     <div style="margin-bottom:20px">
       <div style="font-size:11px;font-weight:700;color:#5a9a6a;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Promo Code <span style="color:#3a6a4a;font-weight:400">(optional)</span></div>
       <div style="display:flex;gap:8px">
-        <input id="promoInput" placeholder="Enter promo code" style="flex:1;background:rgba(0,30,15,0.9);border:1.5px solid rgba(0,255,120,0.2);border-radius:10px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#fff;outline:none"/>
+        <input id="promoInput" placeholder="Enter promo code" onkeydown="if(event.key==='Enter')applyPromo()" style="flex:1;background:rgba(0,30,15,0.9);border:1.5px solid rgba(0,255,120,0.2);border-radius:10px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#fff;outline:none"/>
         <button onclick="applyPromo()" style="background:linear-gradient(135deg,#00aa55,#00ff78);border:none;border-radius:10px;padding:11px 16px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#000;cursor:pointer;white-space:nowrap">Apply</button>
       </div>
       <div id="promoStatus" style="font-size:12px;font-weight:600;min-height:16px;margin-top:6px"></div>
@@ -1345,12 +1708,17 @@ function submitPayment(){
 }
 
 // ═══ LIVE PRICES ═══
-let prices={btc:0,eth:0,sol:0};
+let prices={btc:0,eth:0,sol:0,bnb:0,ltc:0,usdt:1};
 async function fetchAllPrices(){
   try{
-    const res=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+    const res=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,litecoin,tether&vs_currencies=usd');
     const data=await res.json();
-    prices.btc=data.bitcoin.usd;prices.eth=data.ethereum.usd;prices.sol=data.solana.usd;
+    prices.btc=data.bitcoin.usd;
+    prices.eth=data.ethereum.usd;
+    prices.sol=data.solana.usd;
+    prices.bnb=data.binancecoin.usd;
+    prices.ltc=data.litecoin.usd;
+    prices.usdt=data.tether?.usd||1;
     updateAllDisplays();
   }catch(e){
     try{
@@ -1367,31 +1735,33 @@ async function fetchAllPrices(){
   }
 }
 function fmt(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function safeSet(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
+function safeStyle(id,prop,val){var el=document.getElementById(id);if(el)el.style[prop]=val;}
 function updateAllDisplays(){
   const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   if(prices.btc){
-    document.getElementById('btc-live-price').textContent=fmt(prices.btc);
-    document.getElementById('btc-plan-usd').textContent='$'+currentPlanPrice.toLocaleString();
-    document.getElementById('btc-amount').textContent=(currentPlanPrice/prices.btc).toFixed(8)+' BTC';
-    document.getElementById('btc-amount-usd').textContent='≈ $'+currentPlanPrice.toLocaleString()+' USD';
-    document.getElementById('btc-price-dot').style.background='#4ade80';
-    document.getElementById('btc-last-updated').textContent='Updated '+now;
+    safeSet('btc-live-price',fmt(prices.btc));
+    safeSet('btc-plan-usd','$'+currentPlanPrice.toLocaleString());
+    safeSet('btc-amount',(currentPlanPrice/prices.btc).toFixed(8)+' BTC');
+    safeSet('btc-amount-usd','≈ $'+currentPlanPrice.toLocaleString()+' USD');
+    safeStyle('btc-price-dot','background','#4ade80');
+    safeSet('btc-last-updated','Updated '+now);
   }
   if(prices.eth){
-    document.getElementById('eth-live-price').textContent=fmt(prices.eth);
-    document.getElementById('eth-amount').textContent=(currentPlanPrice/prices.eth).toFixed(6)+' ETH';
-    document.getElementById('eth-amount-usd').textContent='≈ $'+currentPlanPrice.toLocaleString()+' USD';
-    document.getElementById('eth-price-dot').style.background='#4ade80';
-    document.getElementById('eth-last-updated').textContent='Updated '+now;
+    safeSet('eth-live-price',fmt(prices.eth));
+    safeSet('eth-amount',(currentPlanPrice/prices.eth).toFixed(6)+' ETH');
+    safeSet('eth-amount-usd','≈ $'+currentPlanPrice.toLocaleString()+' USD');
+    safeStyle('eth-price-dot','background','#4ade80');
+    safeSet('eth-last-updated','Updated '+now);
   }
   if(prices.sol){
-    document.getElementById('sol-live-price').textContent=fmt(prices.sol);
-    document.getElementById('sol-amount').textContent=(currentPlanPrice/prices.sol).toFixed(4)+' SOL';
-    document.getElementById('sol-amount-usd').textContent='≈ $'+currentPlanPrice.toLocaleString()+' USD';
-    document.getElementById('sol-price-dot').style.background='#4ade80';
-    document.getElementById('sol-last-updated').textContent='Updated '+now;
+    safeSet('sol-live-price',fmt(prices.sol));
+    safeSet('sol-amount',(currentPlanPrice/prices.sol).toFixed(4)+' SOL');
+    safeSet('sol-amount-usd','≈ $'+currentPlanPrice.toLocaleString()+' USD');
+    safeStyle('sol-price-dot','background','#4ade80');
+    safeSet('sol-last-updated','Updated '+now);
   }
-  document.getElementById('usdt-amount').textContent=currentPlanPrice.toFixed(2)+' USDT';
+  safeSet('usdt-amount',currentPlanPrice.toFixed(2)+' USDT');
 }
 function setError(){
   ['btc','eth','sol'].forEach(c=>{
@@ -1655,20 +2025,37 @@ function updateVerifyProgress() {
 }
 
 function applyPromo() {
-  const code = (document.getElementById('promoInput') || document.getElementById('cfPromoInput') || {value:''}).value.trim().toUpperCase();
-  const st = document.getElementById('promoStatus') || document.getElementById('cfPromoStatus');
-  if(!code) { if(st){st.style.color='#ef4444';st.textContent='Enter a promo code';} return; }
-  // Check against DB promos loaded on page init
-  const promo = cfPromos.find(p => p.code && p.code.toUpperCase() === code && p.active);
-  if(promo) {
-    let disc = promo.type === 'percent' ? Math.round(curPrice * promo.discount / 100) : Number(promo.discount);
-    disc = Math.min(disc, curPrice);
-    curPrice = curPrice - disc;
+  const inp = document.getElementById('promoInput');
+  const status = document.getElementById('promoStatus');
+  if(!inp || !status) return;
+  const code = inp.value.trim().toUpperCase();
+
+  if(code === '') {
+    status.style.color = '#ef4444';
+    status.textContent = 'Enter a promo code';
+    return;
+  }
+
+  // Only check Supabase-loaded promos
+  const matched = cfPromos && cfPromos.find(p => p.code && p.code.toUpperCase() === code && p.active !== false);
+
+  if(matched) {
+    const discount = matched.discount || matched.discount_amount || 0;
+    const discounted = Math.max(currentPlanPrice - discount, 0);
+    appliedDiscount = discount;
+    status.style.color = '#00ff78';
+    status.textContent = '✅ Promo applied! $' + discount + ' off — you pay $' + discounted;
+    inp.style.borderColor = '#00ff78';
     const mt = document.getElementById('mTotal');
-    if(mt) mt.innerHTML = '$'+curPrice+' <span style="text-decoration:line-through;font-size:14px;color:#3a5a44;font-weight:400">$'+(curPrice+disc)+'</span>';
-    if(st){st.style.color='#00ff78';st.textContent='✅ '+(promo.type==='percent'?promo.discount+'% off':'$'+disc+' off')+' applied! You pay $'+curPrice;}
+    if(mt) mt.innerHTML = '$' + discounted + ' <span style="text-decoration:line-through;font-size:14px;color:#3a5a44;font-weight:400">$' + currentPlanPrice + '</span>';
+    currentPlanPrice = discounted;
+    updateAllDisplays();
+    if(typeof verifyState !== 'undefined') verifyState.promo = true;
+    if(typeof updateVerifyProgress === 'function') updateVerifyProgress();
   } else {
-    if(st){st.style.color='#ef4444';st.textContent='❌ Invalid or inactive promo code';}
+    status.style.color = '#ef4444';
+    status.textContent = '❌ Invalid promo code';
+    inp.style.borderColor = '#ef4444';
   }
 }
 
@@ -2327,6 +2714,270 @@ function showMoreReviews() {
 window.addEventListener('load', () => {
   renderReviews(30);
 });
+
+// ═══ PROFIT CALCULATOR ═══
+const CALC_PLANS = [
+  { name:'Starter',  pts:[90,1500,3000,4000],    maxCoins:1, note:'Starter plan: 1 blockchain' },
+  { name:'Standard', pts:[490,10000,18000,25000], maxCoins:2, note:'Standard plan: up to 2 blockchains' },
+  { name:'Gold',     pts:[900,29000,32000,35000], maxCoins:3, note:'Gold plan: up to 3 blockchains' },
+  { name:'Platinum', pts:[2400,70000,100000,130000], maxCoins:6, note:'Platinum plan: all 6 blockchains' },
+];
+
+function calcInterpolate(plan, days) {
+  const pts = plan.pts;
+  const anchors = [[1,pts[0]],[30,pts[1]],[60,pts[2]],[90,pts[3]]];
+  for (let i=0; i<anchors.length-1; i++) {
+    const [d0,v0] = anchors[i];
+    const [d1,v1] = anchors[i+1];
+    if (days >= d0 && days <= d1) {
+      const t = (days-d0)/(d1-d0);
+      return Math.round(v0 + t*(v1-v0));
+    }
+  }
+  return pts[3];
+}
+
+function updateCalc() {
+  const days    = parseInt(document.getElementById('calcDays').value);
+  const planIdx = parseInt(document.getElementById('calcPlan').value);
+  const plan    = CALC_PLANS[planIdx];
+
+  document.getElementById('calcDaysLabel').textContent = days + ' Day' + (days===1?'':'s');
+  document.getElementById('calcPlanLabel').textContent  = plan.name;
+  document.getElementById('calcPlanBadge').textContent  = plan.name;
+  document.getElementById('calcCoinMax').textContent    = plan.maxCoins;
+  document.getElementById('calcCoinNote').textContent   = plan.note;
+
+  // Deselect coins over limit
+  const selected = document.querySelectorAll('.calc-coin.calc-sel');
+  if (selected.length > plan.maxCoins) {
+    Array.from(selected).slice(plan.maxCoins).forEach(el => {
+      el.classList.remove('calc-sel');
+      el.style.borderColor = 'rgba(255,255,255,0.08)';
+      el.style.background  = 'rgba(0,10,5,0.8)';
+      const chk = el.querySelector('.calc-chk');
+      chk.style.background = 'transparent';
+      chk.style.borderColor= 'rgba(255,255,255,0.15)';
+      chk.style.color      = 'transparent';
+    });
+    document.getElementById('calcCoinCount').textContent = document.querySelectorAll('.calc-coin.calc-sel').length;
+  }
+
+  const estimated = calcInterpolate(plan, days);
+  document.getElementById('calcResult').textContent = '~$' + estimated.toLocaleString();
+}
+
+function toggleCalcCoin(el) {
+  const planIdx = parseInt(document.getElementById('calcPlan').value);
+  const maxCoins = CALC_PLANS[planIdx].maxCoins;
+  const selected = document.querySelectorAll('.calc-coin.calc-sel').length;
+  const isSelected = el.classList.contains('calc-sel');
+  if (!isSelected && selected >= maxCoins) return;
+  el.classList.toggle('calc-sel');
+  const chk = el.querySelector('.calc-chk');
+  if (el.classList.contains('calc-sel')) {
+    el.style.borderColor = 'rgba(0,255,120,0.5)';
+    el.style.background  = 'rgba(0,255,120,0.08)';
+    chk.style.background = '#00ff78';
+    chk.style.borderColor= '#00ff78';
+    chk.style.color      = '#000';
+  } else {
+    el.style.borderColor = 'rgba(255,255,255,0.08)';
+    el.style.background  = 'rgba(0,10,5,0.8)';
+    chk.style.background = 'transparent';
+    chk.style.borderColor= 'rgba(255,255,255,0.15)';
+    chk.style.color      = 'transparent';
+  }
+  document.getElementById('calcCoinCount').textContent = document.querySelectorAll('.calc-coin.calc-sel').length;
+  updateCalc();
+}
+
+document.getElementById('calcDays').addEventListener('input', updateCalc);
+document.getElementById('calcPlan').addEventListener('input', updateCalc);
+updateCalc();
+
+function goToCalcPlan(){
+  const planIdx = parseInt(document.getElementById('calcPlan').value);
+  const planKeys = ['starter','std','gold','plat'];
+  const key = planKeys[planIdx];
+  // Switch the plan tab
+  if(typeof switchPlan === 'function') switchPlan(key);
+  // Scroll to plan section
+  const planEl = document.getElementById('plan');
+  if(planEl) planEl.scrollIntoView({behavior:'smooth'});
+}
+
+// ═══ WALLET CARD MOTION ═══
+(function(){
+  var wallets = [
+    { coin:'BTC', key:'btc', color:'#F7931A', glowColor:'rgba(247,147,26,0.18)', borderColor:'rgba(247,147,26,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#F7931A"/><path d="M22.1 14.3c.3-2-1.2-3.1-3.3-3.8l.7-2.7-1.7-.4-.7 2.6-.9-.2.7-2.7-1.7-.4-.7 2.7-2.3-.6-.4 1.8s1.2.3 1.2.3c.7.2.8.6.8.9l-.9 3.4v.1l-1.2 4.7c-.1.2-.3.5-.8.4 0 0-1.2-.3-1.2-.3L9 22.1l2.2.5.8.2-.7 2.7 1.7.4.7-2.7.9.2-.7 2.6 1.7.4.7-2.7c2.9.5 5.1.3 6-2.3.7-2-.03-3.1-1.5-3.9 1.1-.2 1.9-1 2.1-2.5z" fill="#fff"/>',
+      entries:[{qty:0.26,addr:'bc1q3f8a...c4e2'},{qty:0.13,addr:'1A1zP1...eNSb'},{qty:0.41,addr:'3J98t1...Wr4y'},{qty:0.08,addr:'bc1qxy...7k9p'}]
+    },
+    { coin:'ETH', key:'eth', color:'#627EEA', glowColor:'rgba(98,126,234,0.18)', borderColor:'rgba(98,126,234,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#627EEA"/><path d="M16.498 4v8.87l7.497 3.35z" fill="#fff" opacity=".6"/><path d="M16.498 4L9 16.22l7.498-3.35z" fill="#fff"/><path d="M16.498 21.968v6.027L24 17.616z" fill="#fff" opacity=".6"/><path d="M16.498 27.995v-6.028L9 17.616z" fill="#fff"/><path d="M16.498 20.573l7.497-4.353-7.497-3.348z" fill="#fff" opacity=".2"/><path d="M9 16.22l7.498 4.353v-7.701z" fill="#fff" opacity=".6"/>',
+      entries:[{qty:2.14,addr:'0x3f8a...c4e2'},{qty:5.87,addr:'0xa1b2...9f3d'},{qty:1.03,addr:'0x7c44...1e8b'},{qty:8.44,addr:'0x2d9f...a307'}]
+    },
+    { coin:'SOL', key:'sol', color:'#9945FF', glowColor:'rgba(153,69,255,0.18)', borderColor:'rgba(153,69,255,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#9945FF"/><path d="M10.46 19.67a.5.5 0 0 1 .35-.14h12.46a.25.25 0 0 1 .18.43l-2.07 2.07a.5.5 0 0 1-.35.14H8.57a.25.25 0 0 1-.18-.43zm0-9.7a.5.5 0 0 1 .35-.14h12.46a.25.25 0 0 1 .18.43l-2.07 2.07a.5.5 0 0 1-.35.14H8.57a.25.25 0 0 1-.18-.43zm12.81 4.96a.25.25 0 0 1-.18.43H10.63a.5.5 0 0 1-.35-.14l-2.07-2.07a.25.25 0 0 1 .18-.43h12.46a.5.5 0 0 1 .35.14z" fill="#fff"/>',
+      entries:[{qty:124.5,addr:'8WnwN...3kRp'},{qty:67.2,addr:'5Hg7T...mQzK'},{qty:310.8,addr:'2xR9B...vLp4'},{qty:88.4,addr:'9Ym3C...nTe8'}]
+    },
+    { coin:'BNB', key:'bnb', color:'#F3BA2F', glowColor:'rgba(243,186,47,0.18)', borderColor:'rgba(243,186,47,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#F3BA2F"/><path d="M12.116 14.404L16 10.52l3.886 3.886 2.26-2.26L16 6l-6.144 6.144 2.26 2.26zM6 16l2.26-2.26L10.52 16l-2.26 2.26zm6.116 1.596L16 21.48l3.886-3.886 2.26 2.259L16 26l-6.144-6.144-.003-.003 2.263-2.257zM21.48 16l2.26-2.26L26 16l-2.26 2.26z" fill="#fff"/>',
+      entries:[{qty:12.4,addr:'0xb4f2...8a1c'},{qty:28.7,addr:'bnb1qg...k7m2'},{qty:7.1,addr:'0xc7d3...9e4f'},{qty:45.2,addr:'0x1a8b...3c6d'}]
+    },
+    { coin:'USDT', key:'usdt', color:'#26A17B', glowColor:'rgba(38,161,123,0.18)', borderColor:'rgba(38,161,123,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#26A17B"/><path d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.663s2.902-1.49 6.79-1.664v2.651c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.65c3.88.173 6.775.85 6.775 1.663 0 .812-2.895 1.489-6.775 1.661zm0-3.578v-2.37h5.414V8H8.964v3.435h5.414v2.37c-4.4.202-7.7 1.073-7.7 2.122s3.3 1.92 7.7 2.12v7.597h3.544v-7.6c4.39-.2 7.68-1.07 7.68-2.118 0-1.047-3.29-1.917-7.68-2.12z" fill="#fff"/>',
+      entries:[{qty:4200,addr:'TQn5...mB8k'},{qty:12800,addr:'0x9a3c...7f2e'},{qty:7550,addr:'TKv7...pR4w'},{qty:21000,addr:'0x4b1d...c8g3'}]
+    },
+    { coin:'LTC', key:'ltc', color:'#A5A9FF', glowColor:'rgba(165,169,255,0.18)', borderColor:'rgba(165,169,255,0.45)',
+      svg:'<circle cx="16" cy="16" r="16" fill="#345D9D"/><path d="M10.427 20.01l.803-3.016-1.006.49.49-1.866 1.018-.497L13.49 8h4.485l-1.57 5.878 1.006-.49-.483 1.866-1.006.49-.687 2.614H22L21.397 20H10.427v.01z" fill="#fff"/>',
+      entries:[{qty:18.4,addr:'LQ3f8...c4e2'},{qty:42.1,addr:'LaN7k...9pRm'},{qty:9.7,addr:'Lx4T2...b8Wq'},{qty:61.3,addr:'LmP5j...7dKn'}]
+    }
+  ];
+  var wIdx=0, curW=wallets[0], curE=wallets[0].entries[0];
+  var card=document.getElementById('wMainCard');
+  var glow=document.getElementById('wGlow');
+  var badge=document.getElementById('wFoundBadge');
+  var logoEl=document.getElementById('wCoinLogo');
+  var nameEl=document.getElementById('wCoinName');
+  var amtEl=document.getElementById('wAmount');
+  var usdEl=document.getElementById('wUsdVal');
+  var addrEl=document.getElementById('wAddr');
+  var dateEl=document.getElementById('wDate');
+  if(!card) return;
+
+  function getDateStr(){
+    var d=new Date();
+    return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear()+' | '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+  function calcUSD(w,qty){
+    var p=prices[w.key];
+    if(!p||p===0) return null;
+    return '$'+Math.round(qty*p).toLocaleString('en-US');
+  }
+  function fmtQty(w,qty){
+    if(w.key==='usdt') return qty.toLocaleString('en-US')+' USDT';
+    if(w.key==='btc')  return qty.toFixed(2)+' BTC';
+    if(w.key==='eth')  return qty.toFixed(2)+' ETH';
+    if(w.key==='bnb')  return qty.toFixed(1)+' BNB';
+    if(w.key==='sol')  return qty.toFixed(1)+' SOL';
+    if(w.key==='ltc')  return qty.toFixed(1)+' LTC';
+    return qty+' '+w.coin;
+  }
+  function setCard(w,e){
+    curW=w; curE=e;
+    var usd=calcUSD(w,e.qty)||'Loading...';
+    logoEl.innerHTML='<svg width="36" height="36" viewBox="0 0 32 32">'+w.svg+'</svg>';
+    nameEl.textContent=w.coin; nameEl.style.color=w.color;
+    amtEl.textContent=fmtQty(w,e.qty);
+    usdEl.textContent=usd;
+    addrEl.textContent=e.addr;
+    dateEl.textContent='Wallet check: '+getDateStr();
+    card.style.borderColor=w.borderColor;
+    if(glow) glow.style.background=w.glowColor;
+    if(badge) badge.textContent=w.coin+' wallet found — '+usd+' recovered';
+  }
+  function refreshUSD(){
+    var usd=calcUSD(curW,curE.qty);
+    if(usd&&usdEl){ usdEl.textContent=usd; }
+    if(usd&&badge){ badge.textContent=curW.coin+' wallet found — '+usd+' recovered'; }
+  }
+  function animateNext(){
+    var w=wallets[wIdx];
+    var e=w.entries[Math.floor(Math.random()*w.entries.length)];
+    card.style.transition='opacity 0.35s ease,transform 0.35s ease';
+    card.style.opacity='0';
+    card.style.transform='translateY(-20px) scale(0.96)';
+    setTimeout(function(){
+      setCard(w,e);
+      card.style.transition='none';
+      card.style.transform='translateY(20px) scale(0.96)';
+      card.style.opacity='0';
+      void card.offsetHeight;
+      card.style.transition='opacity 0.45s ease,transform 0.45s cubic-bezier(0.22,1,0.36,1)';
+      card.style.opacity='1';
+      card.style.transform='translateY(0) scale(1)';
+      wIdx=(wIdx+1)%wallets.length;
+    },380);
+  }
+  setCard(wallets[0],wallets[0].entries[0]);
+  card.style.opacity='1'; card.style.transform='translateY(0) scale(1)'; wIdx=1;
+  // Patch updateAllDisplays to also refresh card USD after prices load
+  var _orig=window.updateAllDisplays;
+  window.updateAllDisplays=function(){ if(_orig) _orig(); refreshUSD(); };
+  setInterval(animateNext,3500);
+  setInterval(fetchAllPrices,30000);
+})()
+
+// ═══ COMPARISON TABLE ANIMATION ═══
+(function(){
+  var rows = document.querySelectorAll('.cmp-row');
+  if(!rows.length) return;
+  // Reset to hidden for animation, then animate in on scroll
+  rows.forEach(function(row){
+    row.style.opacity='0';
+    row.style.transform='translateX(-20px)';
+  });
+  var triggered = false;
+  function showRows(){
+    if(triggered) return;
+    triggered = true;
+    rows.forEach(function(row){
+      row.style.opacity='1';
+      row.style.transform='translateX(0)';
+    });
+  }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){ if(entry.isIntersecting) showRows(); });
+  }, {threshold:0.05, rootMargin:'0px 0px -50px 0px'});
+  rows.forEach(function(row){ obs.observe(row); });
+  setTimeout(showRows, 1500);
+})();
+
+// ═══ FAQ ═══
+const FAQS = [
+  { q:'What is the AI Crypto App?', a:'Our AI Crypto App is a powerful wallet scanning tool that uses advanced algorithms to scan billions of blockchain addresses and uncover forgotten or dormant wallets that still hold real funds.' },
+  { q:'No crypto knowledge. Can I still mine forgotten wallets?', a:'Absolutely. Our app is designed for complete beginners. You don\'t need any blockchain experience — the AI handles everything for you automatically.' },
+  { q:'How much can I earn with this?', a:'Earnings vary based on your plan and how many coins you scan. On average, our users report $9,000/month in recovered wallet funds. Use the profit calculator above to estimate your results.' },
+  { q:'Can I get a refund if I\'m not satisfied?', a:'Yes. We offer a money-back guarantee. If you follow the program and don\'t see results, contact our support team and we\'ll make it right.' },
+  { q:'I live in X country. Is that a problem?', a:'No. Our app works worldwide. As long as you have a device and an internet connection, you can start finding hidden wallets from anywhere on the planet.' },
+  { q:'Does my age really not matter?', a:'Not at all. We have successful users from age 18 to 70+. All you need is a smartphone or computer and the willingness to follow a few simple steps.' },
+  { q:'I don\'t have a lot of time available, can I still apply?', a:'Yes. The setup takes under 30 minutes. After that, the AI works 24/7 on its own — even while you sleep. You just check in to review and withdraw your findings.' },
+];
+
+function buildFAQ() {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  list.innerHTML = FAQS.map((f,i) => `
+    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(0,255,120,0.12);border-radius:16px;overflow:hidden;margin-bottom:8px">
+      <button onclick="toggleFAQ(${i})" style="width:100%;background:none;border:none;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:12px">
+        <span style="font-size:14px;font-weight:600;color:#e8f5ee;line-height:1.4">${i+1}. ${f.q}</span>
+        <span id="faq-icon-${i}" style="color:#00ff78;font-size:18px;flex-shrink:0;transition:transform 0.3s">⌄</span>
+      </button>
+      <div id="faq-body-${i}" style="max-height:0;overflow:hidden;transition:max-height 0.35s ease">
+        <div style="padding:0 20px 18px;font-size:14px;color:#7aab8a;line-height:1.7">${f.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  const body = document.getElementById('faq-body-'+i);
+  const icon = document.getElementById('faq-icon-'+i);
+  const isOpen = body.style.maxHeight !== '0px' && body.style.maxHeight !== '';
+  // close all
+  FAQS.forEach((_,j) => {
+    document.getElementById('faq-body-'+j).style.maxHeight = '0px';
+    document.getElementById('faq-icon-'+j).style.transform = 'rotate(0deg)';
+  });
+  if (!isOpen) {
+    body.style.maxHeight = '300px';
+    icon.style.transform = 'rotate(180deg)';
+  }
+}
+
+window.addEventListener('load', buildFAQ);
 
 </script>
 </body>
