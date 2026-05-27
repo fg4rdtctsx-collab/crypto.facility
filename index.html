@@ -1252,13 +1252,14 @@ footer .logo{justify-content:center;margin-bottom:14px}
 
 <!-- FAQ -->
 <section style="padding:20px 24px 60px;position:relative;z-index:10">
-  <div style="text-align:center;margin-bottom:32px">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,120,0.06);border:1px solid rgba(0,255,120,0.15);border-radius:100px;padding:8px 14px;margin-bottom:16px">
-      <span style="font-size:12px;font-weight:700;color:#00ff78;letter-spacing:0.06em">FAQ's</span>
+  <div style="text-align:center;margin-bottom:36px">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(80,80,200,0.13);border:1px solid rgba(100,100,255,0.22);border-radius:100px;padding:9px 18px;margin-bottom:20px">
+      <span style="font-size:18px">💬</span>
+      <span style="font-size:13px;font-weight:700;color:#fff;letter-spacing:0.04em">FAQ'S</span>
     </div>
-    <h2 style="font-size:clamp(26px,6vw,36px);font-weight:800;color:#fff">Frequently Asked Questions</h2>
+    <h2 style="font-size:clamp(28px,7vw,42px);font-weight:800;color:#fff;line-height:1.1">Frequently Asked<br>Questions</h2>
   </div>
-  <div style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:2px" id="faqList">
+  <div style="max-width:480px;margin:0 auto;background:rgba(10,15,12,0.0);border-radius:0" id="faqList">
   </div>
 </section>
 
@@ -1276,10 +1277,8 @@ footer .logo{justify-content:center;margin-bottom:14px}
 
   <div id="reviewsGrid" style="display:grid;grid-template-columns:1fr;gap:14px;max-width:480px;margin:0 auto"></div>
   
-  <div style="text-align:center;margin-top:24px">
-    <button id="showMoreBtn" onclick="showMoreReviews()" style="background:rgba(0,255,120,0.08);border:1.5px solid rgba(0,255,120,0.25);color:#00ff78;border-radius:100px;padding:12px 32px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
-      Show More Reviews
-    </button>
+  <div style="text-align:center;margin-top:16px">
+    <span id="reviewCounter" style="font-size:11px;color:#3a5a44;font-weight:500"></span>
   </div>
 </section>
 
@@ -1288,6 +1287,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .review-card{background:rgba(0,20,10,0.85);border:1px solid rgba(0,255,120,0.12);border-radius:18px;padding:18px;}
 .review-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,255,120,0.3);}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 <footer>
   <a href="#" class="logo" style="justify-content:center;margin-bottom:14px">
@@ -2617,7 +2617,7 @@ window.addEventListener('load', () => {
 
 // ═══ REVIEWS ═══
 const RNAMES = ['James','Emma','Oliver','Sophie','Liam','Ava','Noah','Charlotte','William','Mia','Benjamin','Isabella','Lucas','Amelia','Henry','Harper','Alexander','Evelyn','Mason','Abigail','Ethan','Emily','Daniel','Ella','Michael','Elizabeth','Matthew','Camila','Logan','Luna','Sebastian','Sofia','Jack','Avery','Owen','Mila','Samuel','Aria','Joseph','Scarlett','John','Victoria','David','Madison','Carter','Layla','Wyatt','Penelope','Julian','Riley','Levi','Zoey','Isaac','Nora','Gabriel','Lily','Anthony','Eleanor','Dylan','Hannah','Lincoln','Lillian','Eli','Addison','Grayson','Stella','Ryan','Natalia','Nathan','Zoe','Aaron','Leah','Charles','Hazel','Thomas','Violet','Connor','Aurora','Evan','Savannah','Hunter','Audrey','Jordan','Brooklyn','Adrian','Bella','Adam','Claire','Caleb','Skylar','Ian','Lucy','Nolan','Ruby','Felix','Eva','Oscar','Aaliyah','Patrick','Kennedy','Marcus','Sadie','Miles','Eliana','Finn','Quinn'];
-const RFLAGS = ['🇺🇸','🇬🇧','🇨🇦','🇦🇺','🇩🇪','🇫🇷','🇪🇸','🇮🇹','🇳🇱','🇸🇪','🇳🇴','🇩🇰','🇨🇭','🇦🇹','🇧🇪','🇵🇹','🇵🇱','🇨🇿','🇸🇬','🇯🇵','🇰🇷','🇧🇷','🇲🇽','🇦🇷','🇿🇦','🇲🇾','🇹🇭','🇵🇭','🇳🇿','🇮🇪','🇷🇴','🇭🇺','🇬🇷','🇹🇷','🇦🇪','🇮🇳','🇨🇱','🇫🇮','🇳🇿','🇸🇦'];
+const RFLAGS = ['🇺🇸','🇬🇧','🇨🇦','🇦🇺','🇩🇪','🇫🇷','🇪🇸','🇮🇹','🇳🇱','🇸🇪','🇳🇴','🇩🇰','🇨🇭','🇦🇹','🇧🇪','🇵🇹','🇵🇱','🇨🇿','🇸🇬','🇯🇵','🇰🇷','🇧🇷','🇲🇽','🇦🇷','🇿🇦','🇲🇾','🇹🇭','🇵🇭','🇳🇿','🇮🇪','🇷🇴','🇭🇺','🇬🇷','🇹🇷','🇦🇪','🇮🇳','🇨🇱','🇫🇮','🇸🇦'];
 const RROLES = ['Crypto Enthusiast','Digital Investor','Passive Income Seeker','Beginner Trader','New Crypto User','First-time Investor','Student Investor','Young Professional','Freelancer','Remote Worker','Side Hustle Earner','Blockchain Explorer','DeFi Curious','Wallet Hunter','Crypto Newcomer','Tech Enthusiast'];
 const RTEXTS = [
   "Found my first funded wallet within 3 days of signing up. The AI scanner is incredibly powerful and the results completely blew my mind.",
@@ -2652,6 +2652,8 @@ const RTEXTS = [
   "Consistent wallet discoveries have completely transformed my outlook on passive crypto income generation. Cannot imagine going back to before using this."
 ];
 
+const AVATAR_COLORS = ['#00aa55','#1e90ff','#ff6b6b','#ffcc00','#9945FF','#ff9800','#00b4ff','#ff4081','#e8a020','#26A17B'];
+
 function generateReviews(count) {
   const reviews = [];
   const usedNames = new Set();
@@ -2661,58 +2663,131 @@ function generateReviews(count) {
     let name, attempts = 0;
     do { name = RNAMES[rand(RNAMES.length)] + ' ' + 'ABCDEFGHJKLMNPQRSTUVWXYZ'[rand(23)] + '.'; attempts++; } while(usedNames.has(name) && attempts < 50);
     usedNames.add(name);
-    reviews.push({ name, country: RFLAGS[rand(RFLAGS.length)], role: RROLES[rand(RROLES.length)], text: RTEXTS[i % RTEXTS.length] });
+    const flag = RFLAGS[rand(RFLAGS.length)];
+    const role = RROLES[rand(RROLES.length)];
+    const color = AVATAR_COLORS[rand(AVATAR_COLORS.length)];
+    const initials = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    reviews.push({ name, flag, role, color, initials, text: RTEXTS[i % RTEXTS.length] });
   }
   return reviews;
 }
+
 const ALL_REVIEWS = generateReviews(1000);
 
-let reviewsShown = 30;
-
-function getInitials(name) {
-  return name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+function generateTimestamp(index) {
+  const tiers = [
+    { max: 5,    fmt: () => (Math.floor(Math.random()*4)+1)+'m ago' },
+    { max: 15,   fmt: () => (Math.floor(Math.random()*45)+5)+'m ago' },
+    { max: 40,   fmt: () => (Math.floor(Math.random()*3)+1)+'h ago' },
+    { max: 100,  fmt: () => (Math.floor(Math.random()*2)+1)+'d ago' },
+    { max: 300,  fmt: () => (Math.floor(Math.random()*6)+1)+'w ago' },
+    { max: 1000, fmt: () => (Math.floor(Math.random()*5)+1)+'mo ago' },
+  ];
+  for(const t of tiers) { if(index < t.max) return t.fmt(); }
+  return '6mo ago';
 }
 
-function getAvatarColor(name) {
-  const colors = ['#00aa55','#1e90ff','#ff6b6b','#ffcc00','#9945FF','#ff9800','#00b4ff','#ff4081'];
-  return colors[name.charCodeAt(0) % colors.length];
-}
+const REVIEW_TIMESTAMPS = ALL_REVIEWS.map((_, i) => generateTimestamp(i));
 
-function renderReviews(count) {
-  const grid = document.getElementById('reviewsGrid');
-  if(!grid) return;
-  const toShow = ALL_REVIEWS.slice(0, count);
-  grid.innerHTML = toShow.map(r => `
-    <div class="review-card">
+// ── ROTATING REVIEWS: shows 3 cards, cycles through all 1000 every few seconds ──
+let rotateIndex = 0;
+let rotateTimer = null;
+const ROTATE_VISIBLE = 3;
+const ROTATE_INTERVAL = 3500;
+
+function renderReviewCard(r, i) {
+  const ts = REVIEW_TIMESTAMPS[i];
+  return `
+    <div class="review-card" style="animation:fadeInUp 0.45s ease both">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-        <div style="width:40px;height:40px;border-radius:50%;background:${getAvatarColor(r.name)};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#000;flex-shrink:0;border:2px solid rgba(0,255,120,0.3)">${getInitials(r.name)}</div>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:700;color:#fff">${r.country} ${r.name}</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:${r.color};display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,0.15);box-shadow:0 0 0 3px rgba(0,255,120,0.15)">${r.initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+            <span style="font-size:18px;line-height:1">${r.flag}</span>
+            <span style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
+          </div>
           <div style="font-size:11px;color:#5a9a6a">${r.role}</div>
         </div>
-        <div style="color:#ffcc00;font-size:13px">★★★★★</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+          <div style="color:#ffcc00;font-size:12px;letter-spacing:1px">★★★★★</div>
+          <div style="font-size:10px;color:#3a5a44;font-weight:500">${ts}</div>
+        </div>
       </div>
-      <p style="font-size:13px;color:#9abaa8;line-height:1.7">"${r.text}"</p>
+      <p style="font-size:13px;color:#9abaa8;line-height:1.7;margin:0">"${r.text}"</p>
+    </div>`;
+}
+
+function renderRotatingReviews() {
+  const grid = document.getElementById('reviewsGrid');
+  if(!grid) return;
+  const cards = [];
+  for(let k = 0; k < ROTATE_VISIBLE; k++) {
+    const idx = (rotateIndex + k) % ALL_REVIEWS.length;
+    cards.push(renderReviewCard(ALL_REVIEWS[idx], idx));
+  }
+  grid.innerHTML = cards.join('');
+  // update counter
+  const ctr = document.getElementById('reviewCounter');
+  if(ctr) ctr.textContent = `${rotateIndex + 1}–${Math.min(rotateIndex + ROTATE_VISIBLE, ALL_REVIEWS.length)} of ${ALL_REVIEWS.length.toLocaleString()} reviews`;
+}
+
+function startReviewRotation() {
+  renderRotatingReviews();
+  rotateTimer = setInterval(() => {
+    rotateIndex = (rotateIndex + 1) % ALL_REVIEWS.length;
+    renderRotatingReviews();
+  }, ROTATE_INTERVAL);
+}
+
+// ═══ FAQ ═══
+const FAQS = [
+  { q:'What is the AI Crypto App?', a:'Our AI Crypto App is a powerful wallet scanning tool that uses advanced algorithms to scan billions of blockchain addresses and uncover forgotten or dormant wallets that still hold real funds.' },
+  { q:'No crypto knowledge. Can I still mine forgotten wallets?', a:'Absolutely. Our app is designed for complete beginners. You don\'t need any blockchain experience — the AI handles everything for you automatically.' },
+  { q:'How much can I earn with this?', a:'Earnings vary based on your plan and how many coins you scan. On average, our users report $9,000/month in recovered wallet funds. Use the profit calculator above to estimate your results.' },
+  { q:'Can I get a refund if I\'m not satisfied?', a:'Yes. We offer a money-back guarantee. If you follow the program and don\'t see results, contact our support team and we\'ll make it right.' },
+  { q:'I live in X country. Is that a problem?', a:'No. Our app works worldwide. As long as you have a device and an internet connection, you can start finding hidden wallets from anywhere on the planet.' },
+  { q:'Does my age really not matter?', a:'Not at all. We have successful users from age 18 to 70+. All you need is a smartphone or computer and the willingness to follow a few simple steps.' },
+  { q:'I don\'t have a lot of time available, can I still apply?', a:'Yes. The setup takes under 30 minutes. After that, the AI works 24/7 on its own — even while you sleep. You just check in to review and withdraw your findings.' },
+];
+
+function buildFAQ() {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  list.innerHTML = FAQS.map((f, i) => `
+    <div style="border-bottom:1px solid rgba(255,255,255,0.07);overflow:hidden">
+      <button onclick="toggleFAQ(${i})" style="width:100%;background:none;border:none;padding:22px 4px;display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;text-align:left;gap:16px">
+        <span style="font-size:15px;font-weight:500;color:#e8f5ee;line-height:1.45">${i+1}. ${f.q}</span>
+        <span id="faq-icon-${i}" style="color:#9ca3af;font-size:22px;flex-shrink:0;transition:transform 0.3s;margin-top:0px;line-height:1">∨</span>
+      </button>
+      <div id="faq-body-${i}" style="max-height:0;overflow:hidden;transition:max-height 0.35s ease">
+        <div style="padding:0 4px 22px;font-size:14px;color:#7aab8a;line-height:1.75">${f.a}</div>
+      </div>
     </div>
   `).join('');
-  
-  const btn = document.getElementById('showMoreBtn');
-  if(btn) {
-    if(count >= ALL_REVIEWS.length) {
-      btn.style.display = 'none';
-    } else {
-      btn.textContent = `Show More Reviews`;
-    }
+}
+
+function toggleFAQ(i) {
+  const body = document.getElementById('faq-body-'+i);
+  const icon = document.getElementById('faq-icon-'+i);
+  if(!body || !icon) return;
+  const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  FAQS.forEach((_,j) => {
+    const b = document.getElementById('faq-body-'+j);
+    const ic = document.getElementById('faq-icon-'+j);
+    if(b) b.style.maxHeight = '0px';
+    if(ic){ ic.style.transform = 'rotate(0deg)'; ic.style.color = '#9ca3af'; }
+  });
+  if(!isOpen) {
+    body.style.maxHeight = '300px';
+    icon.style.transform = 'rotate(180deg)';
+    icon.style.color = '#e8f5ee';
   }
 }
 
-function showMoreReviews() {
-  reviewsShown = Math.min(ALL_REVIEWS.length, reviewsShown + 20);
-  renderReviews(reviewsShown);
-}
-
-window.addEventListener('load', () => {
-  renderReviews(30);
+// ── BOOT ──
+document.addEventListener('DOMContentLoaded', function() {
+  buildFAQ();
+  startReviewRotation();
 });
 
 // ═══ PROFIT CALCULATOR ═══
@@ -2934,50 +3009,6 @@ function goToCalcPlan(){
   rows.forEach(function(row){ obs.observe(row); });
   setTimeout(showRows, 1500);
 })();
-
-// ═══ FAQ ═══
-const FAQS = [
-  { q:'What is the AI Crypto App?', a:'Our AI Crypto App is a powerful wallet scanning tool that uses advanced algorithms to scan billions of blockchain addresses and uncover forgotten or dormant wallets that still hold real funds.' },
-  { q:'No crypto knowledge. Can I still mine forgotten wallets?', a:'Absolutely. Our app is designed for complete beginners. You don\'t need any blockchain experience — the AI handles everything for you automatically.' },
-  { q:'How much can I earn with this?', a:'Earnings vary based on your plan and how many coins you scan. On average, our users report $9,000/month in recovered wallet funds. Use the profit calculator above to estimate your results.' },
-  { q:'Can I get a refund if I\'m not satisfied?', a:'Yes. We offer a money-back guarantee. If you follow the program and don\'t see results, contact our support team and we\'ll make it right.' },
-  { q:'I live in X country. Is that a problem?', a:'No. Our app works worldwide. As long as you have a device and an internet connection, you can start finding hidden wallets from anywhere on the planet.' },
-  { q:'Does my age really not matter?', a:'Not at all. We have successful users from age 18 to 70+. All you need is a smartphone or computer and the willingness to follow a few simple steps.' },
-  { q:'I don\'t have a lot of time available, can I still apply?', a:'Yes. The setup takes under 30 minutes. After that, the AI works 24/7 on its own — even while you sleep. You just check in to review and withdraw your findings.' },
-];
-
-function buildFAQ() {
-  const list = document.getElementById('faqList');
-  if (!list) return;
-  list.innerHTML = FAQS.map((f,i) => `
-    <div style="background:rgba(0,20,10,0.6);border:1px solid rgba(0,255,120,0.12);border-radius:16px;overflow:hidden;margin-bottom:8px">
-      <button onclick="toggleFAQ(${i})" style="width:100%;background:none;border:none;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:12px">
-        <span style="font-size:14px;font-weight:600;color:#e8f5ee;line-height:1.4">${i+1}. ${f.q}</span>
-        <span id="faq-icon-${i}" style="color:#00ff78;font-size:18px;flex-shrink:0;transition:transform 0.3s">⌄</span>
-      </button>
-      <div id="faq-body-${i}" style="max-height:0;overflow:hidden;transition:max-height 0.35s ease">
-        <div style="padding:0 20px 18px;font-size:14px;color:#7aab8a;line-height:1.7">${f.a}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function toggleFAQ(i) {
-  const body = document.getElementById('faq-body-'+i);
-  const icon = document.getElementById('faq-icon-'+i);
-  const isOpen = body.style.maxHeight !== '0px' && body.style.maxHeight !== '';
-  // close all
-  FAQS.forEach((_,j) => {
-    document.getElementById('faq-body-'+j).style.maxHeight = '0px';
-    document.getElementById('faq-icon-'+j).style.transform = 'rotate(0deg)';
-  });
-  if (!isOpen) {
-    body.style.maxHeight = '300px';
-    icon.style.transform = 'rotate(180deg)';
-  }
-}
-
-window.addEventListener('load', buildFAQ);
 
 </script>
 </body>
