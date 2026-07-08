@@ -212,6 +212,9 @@ section{padding:60px 24px;position:relative;z-index:10}
 .plat-card .price-box{border-color:rgba(154,175,199,0.25)}
 .price-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
 .price-main{font-size:32px;font-weight:800;color:#fff}
+  .price-main{opacity:0;transition:opacity 0.25s ease}
+  .prices-loaded .price-main{opacity:1}
+  
 .price-old{font-size:18px;font-weight:500;color:#3a4a64;text-decoration:line-through;margin-left:8px}
 .badges{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
 .bdg{border-radius:6px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;display:inline-block}
@@ -2289,6 +2292,7 @@ function updatePlanPrices(s) {
   if(s.eth_address) document.querySelectorAll('#addr-eth,#eth-addr').forEach(el => el.textContent = s.eth_address);
   if(s.usdt_address) document.querySelectorAll('#addr-trc,#usdt-trc').forEach(el => el.textContent = s.usdt_address);
   if(s.sol_address) document.querySelectorAll('#addr-sol,#sol-addr').forEach(el => el.textContent = s.sol_address);
+  document.body.classList.add('prices-loaded');
 }
 
 async function trackPaymentToDB(data) {
