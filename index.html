@@ -529,7 +529,52 @@ footer .logo{justify-content:center;margin-bottom:14px}
 .checking-anim{background:linear-gradient(90deg,rgba(79,147,255,0.1),rgba(79,147,255,0.3),rgba(79,147,255,0.1));background-size:200% 100%;animation:shimmer 1.5s infinite}
 
 </style>
+<style>
+    /* Google Translate Widget */
+    #translate-bar {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 9999;
+      background: rgba(15,25,40,0.92);
+      border: 1px solid rgba(74,144,217,0.35);
+      border-radius: 10px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    #translate-bar span {
+      font-size: 13px;
+      color: #8aa8c8;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    #google_translate_element select {
+      background: transparent;
+      border: none;
+      color: #d0e4ff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      max-width: 130px;
+    }
+    #google_translate_element select option { background: #0e1824; color: #d0e4ff; }
+    .goog-te-banner-frame, .skiptranslate > font { display: none !important; }
+    body { top: 0 !important; }
+    .goog-te-gadget { font-size: 0 !important; }
+    .goog-te-gadget .goog-te-combo { margin: 0 !important; }
+  </style>
 </head>
+
+    <div id="translate-bar">
+      <span>🌐</span>
+      <div id="google_translate_element"></div>
+    </div>
+  
 <body>
 
 <canvas id="spaceCanvas"></canvas>
@@ -3007,5 +3052,25 @@ function goToCalcPlan(){
 })();
 
 </script>
+
+  <script type="text/javascript">
+    // Default to Spanish on first visit
+    (function() {
+      if (!document.cookie.includes('googtrans')) {
+        document.cookie = 'googtrans=/en/es; path=/';
+        document.cookie = 'googtrans=/en/es; path=/; domain=' + location.hostname;
+      }
+    })();
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,en,fr,pt,de,it,ru,zh-CN,ar,ja,ko,hi,tr,pl,nl',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  
 </body>
 </html>
