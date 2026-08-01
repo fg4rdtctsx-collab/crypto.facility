@@ -611,24 +611,39 @@ footer .logo{justify-content:center;margin-bottom:14px}
 /* PC fan spinning rings */
 .pc-fan{
   position:absolute;border-radius:50%;
-  border:2.5px solid transparent;
-  animation:fanSpin 0.6s linear infinite;
+  border:3px solid rgba(180,0,255,0.15);
+  border-top:3px solid rgba(220,100,255,1);
+  border-right:3px solid rgba(120,200,255,0.8);
+  animation:fanSpin 0.55s linear infinite;
   pointer-events:none;
-}
-.pc-fan::before{
-  content:'';position:absolute;inset:-2px;border-radius:50%;
-  background:conic-gradient(from 0deg, rgba(180,0,255,0.0) 0%, rgba(180,0,255,0.9) 40%, rgba(100,180,255,0.9) 70%, rgba(180,0,255,0.0) 100%);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff 0);
-  mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff 0);
+  box-shadow:0 0 10px rgba(180,0,255,0.5);
 }
 @keyframes fanSpin{to{transform:rotate(360deg)}}
-.pc-fan-1{width:42px;height:42px;right:11%;bottom:43%;animation-duration:0.5s}
-.pc-fan-2{width:42px;height:42px;right:11%;bottom:29%;animation-duration:0.7s;animation-direction:reverse}
-.pc-fan-3{width:42px;height:42px;right:11%;bottom:15%;animation-duration:0.55s}
+.pc-fan-1{width:40px;height:40px;right:11%;bottom:44%;animation-duration:0.48s}
+.pc-fan-2{width:40px;height:40px;right:11%;bottom:29%;animation-duration:0.62s;animation-direction:reverse}
+.pc-fan-3{width:40px;height:40px;right:11%;bottom:16%;animation-duration:0.5s}
 @media(max-width:600px){
   .pc-fan-1{width:28px;height:28px;right:9%;bottom:42%}
   .pc-fan-2{width:28px;height:28px;right:9%;bottom:28%}
   .pc-fan-3{width:28px;height:28px;right:9%;bottom:14%}
+}
+
+/* Wallet scanning sweep line on center monitor */
+.scan-overlay{
+  position:absolute;left:26%;right:26%;top:32%;bottom:30%;
+  pointer-events:none;overflow:hidden;border-radius:3px;z-index:5;
+}
+.scan-bar{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(140,80,255,0.95),rgba(80,200,255,0.95),transparent);
+  box-shadow:0 0 10px rgba(140,80,255,0.9),0 0 20px rgba(80,200,255,0.5);
+  animation:scanDown 2s ease-in-out infinite;
+}
+@keyframes scanDown{
+  0%{top:0%;opacity:0}
+  8%{opacity:1}
+  92%{opacity:1}
+  100%{top:100%;opacity:0}
 }
 </style>
 </head>
@@ -665,6 +680,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
 
 <div class="hero-cinematic">
   <div class="pc-fan pc-fan-1"></div>
+  <div class="scan-overlay"><div class="scan-bar"></div></div>
   <div class="pc-fan pc-fan-2"></div>
   <div class="pc-fan pc-fan-3"></div>
 <!-- Left card: Mining Status -->
@@ -1525,8 +1541,7 @@ footer .logo{justify-content:center;margin-bottom:14px}
   <div id="popupText" style="font-size:13px;color:#e8eef8;line-height:1.6">Not sure which plan is right for you?</div>
 </div>
 
-<!-- CRYPTO COIN -->
-<div style="position:fixed;bottom:90px;left:24px;z-index:9998;width:68px;height:68px;cursor:pointer;animation:coinFloat 3s ease-in-out infinite" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'})"><img id="coinImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48dGV4dCB4PSIzMiIgeT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSIyOCIgZmlsbD0iI2ZmZiI+JiM4MzgzOzwvdGV4dD48L3N2Zz4=" width="68" height="68" style="border-radius:50%;display:block;transition:opacity 0.5s ease,box-shadow 0.5s ease;box-shadow:0 0 24px rgba(247,147,26,0.8),0 0 48px rgba(247,147,26,0.3)"/></div>
+
 
 <!-- Begin of Chaport Live Chat code -->
 <script type="text/javascript">
