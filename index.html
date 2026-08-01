@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;background:#09051c}
+html{scroll-behavior:smooth;background:#0f0430}
 body{
   font-family:'Inter',sans-serif;
   background:transparent;
@@ -1651,9 +1651,9 @@ document.querySelectorAll('img[src*="LOGO_B64_PLACEHOLDER"]').forEach(img => img
 
     // Deep space background
     const bg=ctx.createLinearGradient(0,0,W*0.5,H);
-    bg.addColorStop(0,'#07021a');
-    bg.addColorStop(0.4,'#0a0320');
-    bg.addColorStop(1,'#0d0428');
+    bg.addColorStop(0,'#0f0430');
+    bg.addColorStop(0.4,'#130540');
+    bg.addColorStop(1,'#100638');
     ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 
     // Nebula glow
@@ -1666,8 +1666,8 @@ document.querySelectorAll('img[src*="LOGO_B64_PLACEHOLDER"]').forEach(img => img
     nebulas.forEach(n=>{
       const pulse=0.6+0.4*Math.sin(tick*0.007+n.x*0.01);
       const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
-      g.addColorStop(0,n.c+(0.08*pulse)+')');
-      g.addColorStop(0.5,n.c+(0.04*pulse)+')');
+      g.addColorStop(0,n.c+(0.22*pulse)+')');
+      g.addColorStop(0.5,n.c+(0.10*pulse)+')');
       g.addColorStop(1,n.c+'0)');
       ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     });
