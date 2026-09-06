@@ -2047,15 +2047,22 @@ function resetOxaPayButton(clearStatus){
   }
 }
 
+let oxaPayRequestPending=false;
+
 window.addEventListener('pageshow',function(){
   // Browsers can restore this page from cache after a customer returns from
   // OxaPay. Always make the checkout button usable again.
+  oxaPayRequestPending=false;
   resetOxaPayButton(true);
 });
 
 async function startOxaPay(){
   const btn = document.getElementById('oxaPayBtn');
   const st = document.getElementById('oxaPayStatus');
+  if(oxaPayRequestPending){
+    st.textContent='Payment is already being created. Please wait...';
+    return;
+  }
   const emailInput = document.getElementById('checkoutEmail');
   const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
   if(!email || !email.includes('@')){
@@ -2064,13 +2071,16 @@ async function startOxaPay(){
     if(emailInput) emailInput.focus();
     return;
   }
+  oxaPayRequestPending=true;
   btn.disabled=true;
   btn.textContent='Creating payment...';
   st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
   const controller = new AbortController();
-  const timeoutId = setTimeout(function(){ controller.abort(); },12000);
+  // The API stops waiting on OxaPay after 8 seconds. Keep the browser deadline
+  // longer so the server always settles before the customer can retry.
+  const timeoutId = setTimeout(function(){ controller.abort(); },17000);
   try{
     const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
       method:'POST',
@@ -2095,6 +2105,7 @@ async function startOxaPay(){
     }
   }catch(e){
     console.error('OxaPay error:',e);
+    oxaPayRequestPending=false;
     resetOxaPayButton(false);
     st.style.color='#ef4444';
     st.textContent=e&&e.name==='AbortError'
@@ -2105,6 +2116,11 @@ async function startOxaPay(){
   }
 }
 function closeModal(){
+  if(oxaPayRequestPending){
+    const st=document.getElementById('oxaPayStatus');
+    if(st)st.textContent='Payment is being created. Please wait a moment...';
+    return;
+  }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow='';
   resetOxaPayButton(true);
