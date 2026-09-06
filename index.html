@@ -2049,6 +2049,23 @@ function resetOxaPayButton(clearStatus){
 
 let oxaPayRequestPending=false;
 
+function getOxaPayRequestId(){
+  const key='cf_checkout_request';
+  try{
+    const saved=JSON.parse(localStorage.getItem(key)||'null');
+    if(saved&&saved.id&&saved.createdAt&&Date.now()-saved.createdAt<60*60*1000){
+      return saved.id;
+    }
+  }catch(e){}
+  const id=Date.now().toString(36)+'_'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
+  localStorage.setItem(key,JSON.stringify({id,createdAt:Date.now()}));
+  return id;
+}
+
+function clearOxaPayRequestId(){
+  localStorage.removeItem('cf_checkout_request');
+}
+
 window.addEventListener('pageshow',function(){
   // Browsers can restore this page from cache after a customer returns from
   // OxaPay. Always make the checkout button usable again.
@@ -2077,18 +2094,25 @@ async function startOxaPay(){
   st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
+  const requestId=getOxaPayRequestId();
   const controller = new AbortController();
-  // The API stops waiting on OxaPay after 8 seconds. Keep the browser deadline
-  // longer so the server always settles before the customer can retry.
+  // The server records the checkout claim before contacting OxaPay, so a retry
+  // can safely reuse the same request even if this browser request times out.
   const timeoutId = setTimeout(function(){ controller.abort(); },17000);
   try{
     const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device}),
+      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device,requestId}),
       signal:controller.signal
     });
     const data=await res.json();
+    if(res.status===202&&data.pending){
+      const pendingError=new Error(data.error||'Payment is still being created.');
+      pendingError.name='PaymentPendingError';
+      throw pendingError;
+    }
+    if(data.resetRequest)clearOxaPayRequestId();
     if(res.ok&&data.payLink&&data.trackId){
       st.textContent='Redirecting...';
       localStorage.setItem('cf_plan', curPlan);
@@ -2110,6 +2134,8 @@ async function startOxaPay(){
     st.style.color='#ef4444';
     st.textContent=e&&e.name==='AbortError'
       ? 'Payment creation took too long. Tap Pay with Crypto to retry.'
+      : e&&e.name==='PaymentPendingError'
+        ? 'Payment is still being created. Tap Pay with Crypto to check again.'
       : 'Failed to create payment. Tap Pay with Crypto to retry.';
   }finally{
     clearTimeout(timeoutId);
