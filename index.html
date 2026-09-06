@@ -645,6 +645,148 @@ footer .logo{justify-content:center;margin-bottom:14px}
   92%{opacity:1}
   100%{top:100%;opacity:0}
 }
+
+/* --- PREMIUM REDESIGN --- */
+body, html {
+  background-color: #06020a !important;
+  background-image: radial-gradient(circle at 50% 0%, #170a30 0%, #06020a 60%) !important;
+}
+
+.hero-cinematic {
+  box-shadow: 0 0 100px rgba(109, 40, 217, 0.4), 0 0 80px rgba(23, 10, 48, 0.8) inset !important;
+}
+
+.info-card, .chart-card, .donut-card {
+  background: rgba(10, 15, 25, 0.7) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(139, 92, 246, 0.05) !important;
+}
+
+#card-starter .card-inner, #card-std .card-inner {
+  background: #080a0f !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15) !important;
+}
+
+#card-starter .price-box, #card-std .price-box {
+  background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 60%), #0d111a !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: 16px !important;
+  margin: 16px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#card-starter .price-box::after, #card-std .price-box::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+#card-starter .plan-bar, #card-std .plan-bar {
+  margin: 0 16px 16px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.1)) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  color: #e8eef8 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+#card-starter .coins-grid, #card-std .coins-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+
+@media (max-width: 480px) {
+  #card-starter .coins-grid, #card-std .coins-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+#card-starter .coin-item, #card-std .coin-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  padding: 14px 12px !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, rgba(30,41,59,0.4) 0%, rgba(15,23,42,0.8) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  position: relative !important;
+  min-height: 85px;
+  justify-content: flex-start !important;
+}
+
+#card-starter .coin-item:hover, #card-std .coin-item:hover {
+  background: linear-gradient(180deg, rgba(139,92,246,0.1) 0%, rgba(15,23,42,0.9) 100%) !important;
+  border-color: rgba(139,92,246,0.3) !important;
+}
+
+#card-starter .coin-item.sel, #card-std .coin-item.sel {
+  border-color: #8b5cf6 !important;
+  background: linear-gradient(180deg, rgba(139,92,246,0.15) 0%, rgba(15,23,42,0.9) 100%) !important;
+  box-shadow: 0 0 15px rgba(139,92,246,0.2) !important;
+}
+
+#card-starter .coin-name, #card-std .coin-name {
+  margin-top: 14px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  line-height: 1 !important;
+  flex: none !important;
+}
+
+#card-starter .coin-chk, #card-std .coin-chk {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 18px !important;
+  height: 18px !important;
+  background: rgba(0,0,0,0.5) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+}
+
+#card-starter .coin-item.sel .coin-chk, #card-std .coin-item.sel .coin-chk {
+  background: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+}
+
+#card-starter .coin-item.sel .coin-chk svg, #card-std .coin-item.sel .coin-chk svg {
+  visibility: visible !important;
+  stroke: #000 !important;
+}
+
+#card-starter .fchk, #card-std .fchk {
+  background: rgba(139, 92, 246, 0.2) !important;
+  color: #8b5cf6 !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+#card-starter .proceed-btn, #card-std .proceed-btn {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3) !important;
+  border: 1px solid rgba(139,92,246,0.5) !important;
+}
+
+#card-starter .proceed-btn:hover, #card-std .proceed-btn:hover {
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
 </style>
 </head>
 
