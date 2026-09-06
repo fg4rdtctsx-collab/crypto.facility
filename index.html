@@ -2034,6 +2034,25 @@ function openModal(plan,price,dur){
   const os=document.getElementById('oxaPayStatus');if(os)os.textContent='';
 }
 
+function resetOxaPayButton(clearStatus){
+  const btn = document.getElementById('oxaPayBtn');
+  const st = document.getElementById('oxaPayStatus');
+  if(btn){
+    btn.disabled=false;
+    btn.textContent='Pay with Crypto';
+  }
+  if(clearStatus&&st){
+    st.textContent='';
+    st.style.color='';
+  }
+}
+
+window.addEventListener('pageshow',function(){
+  // Browsers can restore this page from cache after a customer returns from
+  // OxaPay. Always make the checkout button usable again.
+  resetOxaPayButton(true);
+});
+
 async function startOxaPay(){
   const btn = document.getElementById('oxaPayBtn');
   const st = document.getElementById('oxaPayStatus');
@@ -2050,11 +2069,14 @@ async function startOxaPay(){
   st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
+  const controller = new AbortController();
+  const timeoutId = setTimeout(function(){ controller.abort(); },12000);
   try{
     const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device})
+      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device}),
+      signal:controller.signal
     });
     const data=await res.json();
     if(res.ok&&data.payLink&&data.trackId){
@@ -2073,15 +2095,19 @@ async function startOxaPay(){
     }
   }catch(e){
     console.error('OxaPay error:',e);
-    btn.disabled=false;
-    btn.textContent=' Pay with Crypto';
+    resetOxaPayButton(false);
     st.style.color='#ef4444';
-    st.textContent='✗ Failed to create payment. Please try again.';
+    st.textContent=e&&e.name==='AbortError'
+      ? 'Payment creation took too long. Tap Pay with Crypto to retry.'
+      : 'Failed to create payment. Tap Pay with Crypto to retry.';
+  }finally{
+    clearTimeout(timeoutId);
   }
 }
 function closeModal(){
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow='';
+  resetOxaPayButton(true);
   if(priceInterval){clearInterval(priceInterval);priceInterval=null;}
 }
 function bgClose(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
