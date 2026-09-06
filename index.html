@@ -2053,11 +2053,11 @@ async function startOxaPay(){
   try{
     const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device})
     });
     const data=await res.json();
-    if(data.success&&data.payLink){
+    if(res.ok&&data.payLink&&data.trackId){
       st.textContent='Redirecting...';
       localStorage.setItem('cf_plan', curPlan);
       localStorage.setItem('cf_price', '$'+curPrice);
