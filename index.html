@@ -254,6 +254,17 @@ section{padding:60px 24px;position:relative;z-index:10}
 .coin-chk svg{width:12px;height:12px;visibility:hidden}
 .coin-item.sel .coin-chk{background:#8b5cf6;border-color:#8b5cf6}
 .coin-item.sel .coin-chk svg{visibility:visible;stroke:#000}
+.selection-shake{animation:selectionShake .38s ease}
+@keyframes selectionShake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-7px)}
+  40%,80%{transform:translateX(7px)}
+}
+.selection-error{
+  margin:-18px 0 22px;padding:10px 12px;border-radius:10px;
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);
+  color:#fca5a5;font-size:12px;font-weight:700;text-align:center;line-height:1.45;
+}
 
 .access-label{font-size:13px;color:#8295b5;margin-bottom:14px}
 .feat-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px}
@@ -1217,7 +1228,7 @@ body, html {
           <div><span class="price-main gold-price">$600</span></div>
           <div class="badges"><span class="bdg bdg-gold">-50%</span><span class="bdg bdg-gold">GOLD</span></div>
         </div>
-        <div class="price-sub">for 3 blockchains</div>
+        <div class="price-sub">for 4 blockchains</div>
         <div style="border-top:1.5px dashed rgba(255,255,255,0.06);margin:18px 0"></div>
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div class="price-label">Subscription for <span class="gold-dur">3 months</span></div>
@@ -1229,8 +1240,8 @@ body, html {
         <div class="choose-label">Choose what you need <b><span id="cnt-gold">0</span>/4</b> <span style="font-size:11px;color:#e8a020;font-weight:600">(max 4)</span></div>
         <div class="coins-grid" data-plan="gold"><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGNzkzMUEiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDYuNiAyOC4yYy42LTQuMi0yLjYtNi41LTctOGwxLjQtNS43LTMuNS0uOS0xLjQgNS41Yy0uOS0uMi0xLjgtLjQtMi44LS42bDEuNC01LjYtMy41LS45LTEuNCA1LjdjLS43LS4yLTEuNS0uMy0yLjItLjVsLTQuOC0xLjItLjkgMy43czIuNi42IDIuNS42YzEuNC40IDEuNyAxLjMgMS42IDJMMjQgMzAuNWMuMSAwIC4zLjEuNC4xbC0uNC0uMS0xLjggN2MtLjIuNC0uNS45LTEuMy43bC0yLjUtLjYtMS43IDQgNC41IDEuMSAyLjUuNi0xLjUgNS44IDMuNS45IDEuNC01LjdjMSAuMyAxLjkuNSAyLjkuN2wtMS40IDUuNiAzLjUuOSAxLjUtNS44YzYuMSAxLjIgMTAuNy43IDEyLjYtNC44IDEuNi00LjUtLjEtNy4xLTMuMy04LjggMi4zLS42IDQtMi4yIDQuNS01LjV6TTM5IDM5LjVjLTEuMSA0LjUtOC44IDIuMS0xMS4zIDEuNWwyLTguMWMyLjUuNiAxMC42IDEuOCA5LjMgNi42em0xLjEtMTEuNGMtMSA0LjEtNy40IDItOS40IDEuNWwxLjgtNy4zYzIgLjUgOC43IDEuNSA3LjYgNS44eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNGM0JBMkYiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTIuMSAxNC40TDE2IDEwLjVsMy45IDMuOSAyLjMtMi4zTDE2IDZsLTYuMSA2LjEgMi4yIDIuM3pNNiAxNmwyLjMtMi4zIDIuMyAyLjMtMi4zIDIuM3ptNi4xIDEuNkwxNiAyMS41bDMuOS0zLjkgMi4zIDIuM0wxNiAyNmwtNi4xLTYuMSAyLjItMi4zek0yMS41IDE2bDIuMy0yLjNMMjYgMTZsLTIuMyAyLjN6TTE2IDEzLjdsMi4zIDIuM0wxNiAxOC4zbC0yLjMtMi4zeiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">BNB</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM2MjdFRUEiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0zMiA5djE4LjZsMTUuNyA3eiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0zMiA5TDE2LjMgMzQuNmwxNS43LTd6Ii8+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjYpIiBkPSJNMzIgNDQuNVY1NmwxNS43LTIxLjd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMyIDU2VjQ0LjVMMTYuMyAzNC4zeiIvPjxwYXRoIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgZD0iTTMyIDQxLjVsMTUuNy04LjlMMzIgMjUuNnoiLz48cGF0aCBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNikiIGQ9Ik0xNi4zIDMyLjZMMzIgNDEuNVYyNS42eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">ETH</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMxOTE5MTkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNsMSIgeDE9IjEwIiB5MT0iNDYiIHgyPSI1NCIgeTI9IjQ2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzk5NDVGRiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE0RjE5NSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJzbDIiIHgxPSIxMCIgeTE9IjMyIiB4Mj0iNTQiIHkyPSIzMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5OTQ1RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNEYxOTUiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0ic2wzIiB4MT0iMTAiIHkxPSIxOCIgeDI9IjU0IiB5Mj0iMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjOTk0NUZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTRGMTk1Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZmlsbD0idXJsKCNzbDEpIiBkPSJNMTMgNDNoMzNsLTUuNSA2SDEwbDMtNnoiLz48cGF0aCBmaWxsPSJ1cmwoI3NsMikiIGQ9Ik0xMyAyOWgzM2wtNS41IDZIMTBsMy02eiIvPjxwYXRoIGZpbGw9InVybCgjc2wzKSIgZD0iTTQxIDE1SDEwbDMtNmgzM2wtNSA2eiIvPjwvc3ZnPg==" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">SOL</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMzNDVEOUQiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzggMTVoLTlMMjMuNSAzNGw0LjUtMS41LTEuNSA1LjVIMjBMMTggNDVoMjhsMi03SDM1bDUuNS0yMHoiLz48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">LTC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyNkExN0IiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzYuNCAxOS4ySDI3LjZWMjVIMTh2NS4yaDkuNnYuOGMwIDUuMyAyIDkuNSA0LjQgOS41czQuNC00LjIgNC40LTkuNXYtLjhINDZWMjVIMzYuNHYtNS44em0wIDE2YzAgMy0yIDUuMy00LjQgNS4zUzI3LjYgMzguMiAyNy42IDM1LjJ2LS4yaDguOHYuMnoiIG9wYWNpdHk9IjAiLz48dGV4dCB4PSIzMiIgeT0iNDMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwIiBmaWxsPSIjZmZmIj7igq48L3RleHQ+PC9zdmc+" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">USDT</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNDMkE2MzMiLz48dGV4dCB4PSIzMiIgeT0iNDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMyIiBmaWxsPSIjZmZmIj7DkDwvdGV4dD48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">DOGE</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="coin-item" onclick="toggleCoin(this,'gold')"><div class="coin-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiM4MjQ3RTUiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDEgMjYuNWwtOS01LjItOSA1LjJ2MTAuNGw5IDUuMiA5LTUuMnptLTkgMTIuMmwtNi0zLjV2LTdsNiAzLjUgNi0zLjV2N3oiLz48L3N2Zz4=" width="28" height="28" style="border-radius:50%"/></div><span class="coin-name">MATIC</span><div class="coin-chk"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
         <div class="access-label">You will get access to:</div>
-        <ul class="feat-list"><li><div class="fchk fchk-gold"></div><span>3+ blockchains for use at $6/month</span></li><li><div class="fchk fchk-gold"></div><span>5.000.000 wallets generated every day</span></li><li><div class="fchk fchk-gold"></div><span>Guaranteed earnings $15k–$45k/month</span></li><li><div class="fchk fchk-gold"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk fchk-gold"></div><span>Free addition of new blockchains in the future</span></li><li><div class="fchk fchk-gold"></div><span>Priority access to our AI Mining Formula</span></li><li><div class="fchk fchk-gold"></div><span>VIP 24/7 Support &amp; on-demand guidance</span></li></ul>
-        <button class="proceed-btn pbtn-gold" onclick="openModal('Gold', '$'+(cfSettings&&cfSettings.gold_price||600), cfSettings&&cfSettings.gold_dur||'6 months')">Proceed payment</button>
+        <ul class="feat-list"><li><div class="fchk fchk-gold"></div><span>4 blockchains of your choice</span></li><li><div class="fchk fchk-gold"></div><span>5.000.000 wallets generated every day</span></li><li><div class="fchk fchk-gold"></div><span>Guaranteed earnings $15k–$45k/month</span></li><li><div class="fchk fchk-gold"></div><span>Get your money back if no wallet is found</span></li><li><div class="fchk fchk-gold"></div><span>Free addition of new blockchains in the future</span></li><li><div class="fchk fchk-gold"></div><span>Priority access to our AI Mining Formula</span></li><li><div class="fchk fchk-gold"></div><span>VIP 24/7 Support &amp; on-demand guidance</span></li></ul>
+        <button class="proceed-btn pbtn-gold" onclick="openModal('Gold', '$'+(cfSettings&&cfSettings.gold_price||600), cfSettings&&cfSettings.gold_dur||'3 months')">Proceed payment</button>
       </div>
     </div>
   </div>
@@ -1996,6 +2007,7 @@ document.querySelectorAll('.logo img').forEach(img => {
 
 // ═══ PLAN TABS ═══
 const planLimits={starter:1,std:2,gold:4,plat:8};
+const planKeyByName={Starter:'starter',Standard:'std',Gold:'gold',Platinum:'plat'};
 const tabs=document.querySelectorAll('.ttab');
 function switchPlan(p){
   document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active'));
@@ -2008,16 +2020,56 @@ function toggleCoin(el,plan){
   const limit=planLimits[plan];
   const sel=document.querySelectorAll('#card-'+plan+' .coin-item.sel');
   if(!el.classList.contains('sel')&&sel.length>=limit){
-    // Swap: deselect the oldest selected coin so user can pick a new one
-    sel[0].classList.remove('sel');
+    showSelectionError(plan,'Maximum '+limit+' selected. Unselect one blockchain before choosing another.');
+    return;
   }
   el.classList.toggle('sel');
-  document.getElementById('cnt-'+plan).textContent=document.querySelectorAll('#card-'+plan+' .coin-item.sel').length;
+  const selectedCount=document.querySelectorAll('#card-'+plan+' .coin-item.sel').length;
+  document.getElementById('cnt-'+plan).textContent=selectedCount;
+  if(selectedCount===limit)clearSelectionError(plan);
+}
+function shakeSelection(plan){
+  const grid=document.querySelector('#card-'+plan+' .coins-grid');
+  if(!grid)return;
+  grid.classList.remove('selection-shake');
+  void grid.offsetWidth;
+  grid.classList.add('selection-shake');
+}
+function clearSelectionError(plan){
+  const error=document.querySelector('#card-'+plan+' .selection-error');
+  if(error)error.remove();
+}
+function showSelectionError(plan,message){
+  const card=document.getElementById('card-'+plan);
+  const grid=card&&card.querySelector('.coins-grid');
+  if(!card||!grid)return;
+  let error=card.querySelector('.selection-error');
+  if(!error){
+    error=document.createElement('div');
+    error.className='selection-error';
+    grid.insertAdjacentElement('afterend',error);
+  }
+  error.textContent=message;
+  shakeSelection(plan);
+}
+function hasRequiredSelections(plan){
+  const limit=planLimits[plan];
+  const selected=document.querySelectorAll('#card-'+plan+' .coin-item.sel').length;
+  if(selected!==limit){
+    showSelectionError(plan,'Select exactly '+limit+' blockchain'+(limit===1?'':'s')+' before proceeding to payment.');
+    const card=document.getElementById('card-'+plan);
+    if(card)card.scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  clearSelectionError(plan);
+  return true;
 }
 
 // ═══ MODAL ═══
 let curPlan='',priceInterval=null,currentPlanPrice=200;
 function openModal(plan,price,dur){
+  const planKey=planKeyByName[plan];
+  if(!planKey||!hasRequiredSelections(planKey))return;
   curPlan=plan;
   curPrice=parseInt((price+'').replace(/[^0-9]/g,''));
   currentPlanPrice=curPrice;
@@ -2076,6 +2128,12 @@ window.addEventListener('pageshow',function(){
 async function startOxaPay(){
   const btn = document.getElementById('oxaPayBtn');
   const st = document.getElementById('oxaPayStatus');
+  const planKey=planKeyByName[curPlan];
+  if(!planKey||!hasRequiredSelections(planKey)){
+    st.style.color='#ef4444';
+    st.textContent='Select all required blockchains before payment.';
+    return;
+  }
   if(oxaPayRequestPending){
     st.textContent='Payment is already being created. Please wait...';
     return;
@@ -2120,7 +2178,6 @@ async function startOxaPay(){
       localStorage.setItem('cf_track_id', String(data.trackId));
       localStorage.setItem('cf_email', email);
       // Save selected blockchains
-      const planKey = {Starter:'starter',Standard:'std',Gold:'gold',Platinum:'plat'}[curPlan] || 'std';
       const selectedCoins = Array.from(document.querySelectorAll('#card-'+planKey+' .coin-item.sel')).map(el=>el.querySelector('.coin-name').textContent).join(', ');
       localStorage.setItem('cf_coins', selectedCoins || 'Not selected');
       window.location.href=data.payLink;
@@ -2291,12 +2348,12 @@ setInterval(fadeCoin, 9000);
 // ═══ PLAN COMPARISON POPUPS ═══
 const planMsgs=[
   "◆ <b style='color:#9aafc7'>Platinum</b> earns <b style='color:#8b5cf6'>$70k–$100k/month</b> — the highest tier!",
-  "★ <b style='color:#e8a020'>Gold</b> members earn <b style='color:#8b5cf6'>$15k–$45k/month</b> with 3 blockchains!",
+  "★ <b style='color:#e8a020'>Gold</b> members earn <b style='color:#8b5cf6'>$15k–$45k/month</b> with 4 blockchains!",
   "■ <b>Money-back guarantee</b> — if no wallet is found, you get refunded. Zero risk!",
   "↑ <b style='color:#9aafc7'>Platinum</b> earns $70k–$100k/month vs $2k–$9k on Standard.",
   " <b style='color:#8b5cf6'>Standard</b> earns $2k–$9k/month. Upgrade to Gold or Platinum anytime!",
   "▶ <b style='color:#9aafc7'>Platinum</b> = $70k–$100k/month. The most powerful plan we offer!",
-  "→ Not sure? <b style='color:#e8a020'>Gold</b> is our most popular — 3 blockchains, great earnings!",
+  "→ Not sure? <b style='color:#e8a020'>Gold</b> is our most popular — 4 blockchains, great earnings!",
   "→ Standard: $2k–$9k/month | Gold: $15k–$45k/month | Platinum: $70k–$100k/month",
 ];
 let pmIdx=0;
@@ -2648,10 +2705,10 @@ async function doGetApp() {
       </div>
     </div>
     <div style="background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.3);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#ffd580;text-align:center;line-height:1.7">
-      ⚠ <strong>Important:</strong> Tap the button below to open our live chat.<br>Los detalles de tu pedido se copian <strong style="color:#8b5cf6">automatically</strong> — ¡solo <strong style="color:#8b5cf6">keep pulsado y pega</strong> el mensaje en el chat y send it a nuestro equipo de soporte!
+      ⚠ <strong>Important:</strong> Tap the button below to open our live chat.<br>Your order details are copied <strong style="color:#8b5cf6">automatically</strong> — just <strong style="color:#8b5cf6">long press and paste</strong> the message into the chat, then send it to our support team.
     </div>
     <button id="chaportBtn" onclick="openChaportWithMsg()" style="width:100%;border:none;border-radius:100px;padding:17px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#2563d4,#8b5cf6);color:#000;box-shadow:0 8px 30px rgba(79,147,255,0.35);margin-bottom:10px">
-       Obtener mi App por Chat en Vivo
+       Get My App via Live Chat
     </button>
     <button onclick="closeModal()" style="width:100%;border:none;border-radius:100px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;background:rgba(79,147,255,0.08);color:#8295b5;cursor:pointer">Close</button>
   `;
@@ -2666,7 +2723,7 @@ function openChaportWithMsg() {
   const btn = document.getElementById('chaportBtn');
   if(btn) {
     btn.textContent = ' Message copied! Opening chat...';
-    setTimeout(()=>{ btn.textContent = ' Obtener mi App por Chat en Vivo'; }, 3000);
+    setTimeout(()=>{ btn.textContent = ' Get My App via Live Chat'; }, 3000);
   }
   // Open Chaport - try all methods
   setTimeout(() => {
