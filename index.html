@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <title>Crypto Facility</title>
+<link rel="canonical" href="https://cryptofacilitypro.com/">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -2071,7 +2072,7 @@ function openModal(plan,price,dur){
   const planKey=planKeyByName[plan];
   if(!planKey||!hasRequiredSelections(planKey))return;
   curPlan=plan;
-  curPrice=parseInt((price+'').replace(/[^0-9]/g,''));
+  curPrice=Number((price+'').replace(/[^0-9.]/g,''));
   currentPlanPrice=curPrice;
   document.getElementById('mPlan').textContent=plan;
   document.getElementById('mDur').textContent=dur;
@@ -2101,16 +2102,23 @@ function resetOxaPayButton(clearStatus){
 
 let oxaPayRequestPending=false;
 
-function getOxaPayRequestId(){
+function getOxaPayRequestId(details){
   const key='cf_checkout_request';
+  const signature=JSON.stringify(details);
   try{
     const saved=JSON.parse(localStorage.getItem(key)||'null');
-    if(saved&&saved.id&&saved.createdAt&&Date.now()-saved.createdAt<60*60*1000){
+    if(saved&&saved.id&&saved.signature===signature&&saved.createdAt&&Date.now()-saved.createdAt<60*60*1000){
       return saved.id;
     }
   }catch(e){}
   const id=Date.now().toString(36)+'_'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
-  localStorage.setItem(key,JSON.stringify({id,createdAt:Date.now()}));
+  try{
+    localStorage.setItem(key,JSON.stringify({id,signature,createdAt:Date.now()}));
+  }catch(e){
+    const error=new Error('Enable browser storage for this website, then retry checkout.');
+    error.name='CheckoutStorageError';
+    throw error;
+  }
   return id;
 }
 
@@ -2140,7 +2148,7 @@ async function startOxaPay(){
   }
   const emailInput = document.getElementById('checkoutEmail');
   const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
-  if(!email || !email.includes('@')){
+  if(!email || !emailInput || !emailInput.checkValidity()){
     st.style.color='#ef4444';
     st.textContent='Enter a valid email for your order.';
     if(emailInput) emailInput.focus();
@@ -2152,12 +2160,13 @@ async function startOxaPay(){
   st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
-  const requestId=getOxaPayRequestId();
   const controller = new AbortController();
   // The server records the checkout claim before contacting OxaPay, so a retry
   // can safely reuse the same request even if this browser request times out.
   const timeoutId = setTimeout(function(){ controller.abort(); },17000);
   try{
+    const selectedCoins = Array.from(document.querySelectorAll('#card-'+planKey+' .coin-item.sel')).map(el=>el.querySelector('.coin-name').textContent).join(', ');
+    const requestId=getOxaPayRequestId({email,plan:curPlan,amount:curPrice,coins:selectedCoins});
     const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2178,11 +2187,10 @@ async function startOxaPay(){
       localStorage.setItem('cf_track_id', String(data.trackId));
       localStorage.setItem('cf_email', email);
       // Save selected blockchains
-      const selectedCoins = Array.from(document.querySelectorAll('#card-'+planKey+' .coin-item.sel')).map(el=>el.querySelector('.coin-name').textContent).join(', ');
       localStorage.setItem('cf_coins', selectedCoins || 'Not selected');
       window.location.href=data.payLink;
     }else{
-      throw new Error('No payment link');
+      throw new Error(data.error || 'No payment link returned. Please retry checkout.');
     }
   }catch(e){
     console.error('OxaPay error:',e);
@@ -2193,7 +2201,11 @@ async function startOxaPay(){
       ? 'Payment creation took too long. Tap Pay with Crypto to retry.'
       : e&&e.name==='PaymentPendingError'
         ? 'Payment is still being created. Tap Pay with Crypto to check again.'
-      : 'Failed to create payment. Tap Pay with Crypto to retry.';
+      : e&&e.name==='CheckoutStorageError'
+        ? e.message
+        : e&&e.message
+          ? e.message+' Tap Pay with Crypto to retry.'
+          : 'Failed to create payment. Tap Pay with Crypto to retry.';
   }finally{
     clearTimeout(timeoutId);
   }
