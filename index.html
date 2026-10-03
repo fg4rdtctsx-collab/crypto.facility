@@ -2900,7 +2900,6 @@ window.addEventListener('load', () => {
   const urlParams = new URLSearchParams(window.location.search);
   if(urlParams.get('payment') === 'success') {
     setTimeout(verifyReturnedPayment, 500);
-    window.history.replaceState({}, document.title, window.location.pathname);
   }
 });
 
@@ -2926,7 +2925,7 @@ async function verifyReturnedPayment() {
   try {
     const response = await fetch('https://code-adjuster-1-king.replit.app/api/payment/status/'+encodeURIComponent(trackId));
     const result = await response.json();
-    if(!['Paid','Confirming','paid'].includes(result.status)) {
+    if(!response.ok||!['Paid','paid'].includes(result.status)) {
       throw new Error('Payment is not confirmed yet');
     }
 
@@ -2947,6 +2946,7 @@ async function verifyReturnedPayment() {
     localStorage.removeItem('cf_coins');
     localStorage.removeItem('cf_track_id');
     localStorage.removeItem('cf_email');
+    window.history.replaceState({}, document.title, window.location.pathname);
   } catch(e) {
     if(statusEl) {
       statusEl.style.color='#f59e0b';
