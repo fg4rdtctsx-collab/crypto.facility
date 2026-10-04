@@ -2102,6 +2102,41 @@ function resetOxaPayButton(clearStatus){
 
 let oxaPayRequestPending=false;
 
+const CF_PAYMENT_API_BASES=[
+  'https://crypto-facility-pro-app.netlify.app/checkout-api',
+  'https://code-adjuster-1-king.replit.app/api/payment'
+];
+
+async function requestPaymentApi(path,options,onBackup){
+  for(let attempt=0;attempt<CF_PAYMENT_API_BASES.length;attempt++){
+    const controller=new AbortController();
+    const timeoutId=setTimeout(function(){controller.abort();},25000);
+    try{
+      const res=await fetch(CF_PAYMENT_API_BASES[attempt]+path,{
+        ...options,
+        signal:controller.signal
+      });
+      // An unavailable proxy can return an HTML error or the SPA instead of JSON.
+      // Never mistake that for a response from the payment API.
+      if(!(res.headers.get('content-type')||'').includes('application/json')){
+        throw new Error('Payment connection returned an unexpected response');
+      }
+      const data=await res.json();
+      // Keep real API errors intact; do not retry a rejected order or provider error.
+      return {res,data};
+    }catch(error){
+      if(attempt===CF_PAYMENT_API_BASES.length-1){
+        const connectionError=new Error('Could not connect to the payment service. Please check your connection and try again.');
+        connectionError.name='PaymentConnectionError';
+        throw connectionError;
+      }
+    }finally{
+      clearTimeout(timeoutId);
+    }
+    if(onBackup)onBackup();
+  }
+}
+
 function getOxaPayRequestId(details){
   const key='cf_checkout_request';
   const signature=JSON.stringify(details);
@@ -2160,20 +2195,18 @@ async function startOxaPay(){
   st.textContent='Please wait...';
   const ua=navigator.userAgent;
   const device=/Mobile|Android|iPhone/i.test(ua)?'Mobile':/iPad|Tablet/i.test(ua)?'Tablet':'Desktop';
-  const controller = new AbortController();
-  // The server records the checkout claim before contacting OxaPay, so a retry
-  // can safely reuse the same request even if this browser request times out.
-  const timeoutId = setTimeout(function(){ controller.abort(); },17000);
   try{
     const selectedCoins = Array.from(document.querySelectorAll('#card-'+planKey+' .coin-item.sel')).map(el=>el.querySelector('.coin-name').textContent).join(', ');
     const requestId=getOxaPayRequestId({email,plan:curPlan,amount:curPrice,coins:selectedCoins});
-    const res=await fetch('https://code-adjuster-1-king.replit.app/api/payment/create',{
+    // Every connection attempt uses this exact body and claim ID, including
+    // retries after a lost response. The server reuses an already-created invoice.
+    const {res,data}=await requestPaymentApi('/create',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device,requestId}),
-      signal:controller.signal
+      body:JSON.stringify({email,amount:curPrice,plan:curPlan,method:'crypto',device,requestId})
+    },function(){
+      st.textContent='Trying a backup payment connection...';
     });
-    const data=await res.json();
     if(res.status===202&&data.pending){
       const pendingError=new Error(data.error||'Payment is still being created.');
       pendingError.name='PaymentPendingError';
@@ -2206,8 +2239,6 @@ async function startOxaPay(){
         : e&&e.message
           ? e.message+' Tap Pay with Crypto to retry.'
           : 'Failed to create payment. Tap Pay with Crypto to retry.';
-  }finally{
-    clearTimeout(timeoutId);
   }
 }
 function closeModal(){
@@ -2923,8 +2954,7 @@ async function verifyReturnedPayment() {
     return;
   }
   try {
-    const response = await fetch('https://code-adjuster-1-king.replit.app/api/payment/status/'+encodeURIComponent(trackId));
-    const result = await response.json();
+    const {res:response,data:result}=await requestPaymentApi('/status/'+encodeURIComponent(trackId));
     if(!response.ok||!['Paid','paid'].includes(result.status)) {
       throw new Error('Payment is not confirmed yet');
     }
