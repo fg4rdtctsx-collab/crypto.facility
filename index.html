@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- CF website maintenance control: hosted by the existing CF admin, not the mobile app. -->
+<style id="cf-maintenance-bootstrap-style">html.cf-maintenance-checking body{visibility:hidden!important;background:#fff!important}</style>
+<script id="cf-maintenance-bootstrap">document.documentElement.classList.add('cf-maintenance-checking');setTimeout(function(){document.documentElement.classList.remove('cf-maintenance-checking')},5000);</script>
+<script defer src="https://cfadmin28.netlify.app/maintenance-bridge.js"></script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
