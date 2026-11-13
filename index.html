@@ -1,17 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'none'; connect-src 'none'; frame-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="icon" href="assets/miner-logo.png" type="image/png">
+<script>/* This file runs before the legacy UI. No request reaches a real service. */
+(function () {
+  "use strict";
+  var started = Date.now();
+  var pending = false;
+  var redirectTimer;
+  var defaults = { starter_price:49, std_price:200, gold_price:600, plat_price:1000, starter_dur:"2 weeks", std_dur:"1 month", gold_dur:"3 months", plat_dur:"12 months" };
+  var coinPrices = { bitcoin:{usd:65000}, ethereum:{usd:3000}, solana:{usd:150}, binancecoin:{usd:600}, litecoin:{usd:70}, tether:{usd:1} };
+  window.__CF_UI_LAB__ = true;
+  window.fetch = async function (input) {
+    var url = String(input);
+    var result = [];
+    if (url.includes("cf_settings")) result = [defaults];
+    else if (url.includes("coingecko")) result = coinPrices;
+    else if (url.includes("coinbase")) result = {data:{amount:"65000"}};
+    else if (url.includes("randomuser")) result = {results:Array.from({length:60},function(){return {picture:{thumbnail:"assets/miner-logo.png",medium:"assets/miner-logo.png"}};})};
+    else if (url.includes("ipapi")) result = {country_name:"UI training demo",country_code:"",city:"Local fixture"};
+    else if (url.includes("/create") || url.includes("/status")) result = {error:"Real payments are disabled in the UI lab",status:"NotCreated"};
+    return new Response(JSON.stringify(result), {status:200,headers:{"content-type":"application/json"}});
+  };
+  function message(text) {
+    var node = document.getElementById("cfLabMessage");
+    if (!node) return;
+    node.textContent = text;
+    node.hidden = false;
+    setTimeout(function(){node.hidden=true;},3500);
+  }
+  window.open = function () {message("External services are disabled in this UI training demo.");return null;};
+  function reduced() { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  function hideLoader() {
+    var loader = document.getElementById("cfLabLoader");
+    if (!loader) return;
+    loader.hidden = true;
+    loader.classList.remove("payment","leaving");
+  }
+  function reset() {
+    clearTimeout(redirectTimer);
+    pending = false;
+    hideLoader();
+    var button = document.getElementById("oxaPayBtn");
+    if (button) button.disabled = false;
+  }
+  function showLoader(text) {
+    var loader = document.getElementById("cfLabLoader");
+    if (!loader) return;
+    loader.classList.remove("leaving");
+    loader.classList.add("payment");
+    loader.hidden = false;
+    document.getElementById("cfLabLoadingText").textContent = text;
+  }
+  async function mockPayment() {
+    if (pending) return;
+    var email = document.getElementById("checkoutEmail");
+    var status = document.getElementById("oxaPayStatus");
+    if (!email || !email.value.trim() || !email.checkValidity()) {
+      if (status) status.textContent = "Enter a valid email for this demo. No email is sent.";
+      if (email) email.focus();
+      return;
+    }
+    var plan = document.getElementById("mPlan").textContent;
+    var amount = document.getElementById("mTotal").textContent;
+    pending = true;
+    document.getElementById("oxaPayBtn").disabled = true;
+    showLoader("OPENING MOCK CHECKOUT · NO PAYMENT");
+    redirectTimer = setTimeout(function () {
+      var target = new URL("mock-checkout.html", location.href);
+      target.search = new URLSearchParams({plan:plan,amount:amount}).toString();
+      location.assign(target.href);
+    },1200);
+  }
+  document.addEventListener("click", function (event) {
+    var link = event.target.closest && event.target.closest("a[href]");
+    if (!link) return;
+    var href = link.getAttribute("href");
+    if (!href || href[0] === "#") return;
+    var target = new URL(href, location.href);
+    if (target.origin !== location.origin || !/^https?:$/.test(target.protocol)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      message("External links are disabled in this UI training demo.");
+    }
+  }, true);
+  document.addEventListener("DOMContentLoaded", function () {
+    /* Replace the legacy checkout entry point, not its selection or layout. */
+    window.startOxaPay = mockPayment;
+    window.verifyReturnedPayment = async function () {};
+    window.playVideo = function () {message("External video is disabled in this UI training demo.");};
+    window.openChaportWithMsg = function () {message("Live support is disabled in this UI training demo.");};
+    window.doGetApp = async function () {message("This UI lab does not activate accounts or deliver the app.");};
+    document.querySelectorAll('img[src^="http"]').forEach(function (img) {img.src="assets/miner-logo.png";});
+    setTimeout(function () {
+      var loader = document.getElementById("cfLabLoader");
+      if (!loader || pending) return;
+      if (reduced()) {hideLoader();return;}
+      loader.classList.add("leaving");
+      setTimeout(hideLoader,230);
+    }, Math.max(0,1200-(Date.now()-started)));
+  });
+  window.addEventListener("pageshow", function(event) {if(event.persisted) reset();});
+})();
+</script>
 <!-- CF website maintenance control: hosted by the existing CF admin, not the mobile app. -->
-<style id="cf-maintenance-bootstrap-style">html.cf-maintenance-checking body{visibility:hidden!important;background:#fff!important}</style>
-<script id="cf-maintenance-bootstrap">document.documentElement.classList.add('cf-maintenance-checking');setTimeout(function(){document.documentElement.classList.remove('cf-maintenance-checking')},5000);</script>
-<script defer src="https://cfadmin28.netlify.app/maintenance-bridge.js"></script>
+
+
+
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
-<title>Crypto Facility</title>
-<link rel="canonical" href="https://cryptofacilitypro.com/">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>UI training demo — Crypto Facility</title>
+
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;background:#0f0430}
@@ -899,9 +1004,58 @@ body, html {
 }
 
 </style>
+<style>/* A colour-only overlay on the original layout. The lab notice is mandatory. */
+:root{--lab-purple:#3A0CA3;--lab-black:#050505;--lab-white:#fff;--lab-notice-height:76px}
+html{background:#050505!important;scroll-padding-top:calc(var(--lab-notice-height) + 80px)}
+body{background:#050505!important;color:#fff!important;padding-top:var(--lab-notice-height)!important}
+body::before,body::after{background-image:none!important}
+nav{background:rgba(5,5,5,.96)!important;top:var(--lab-notice-height)!important;border-color:rgba(255,255,255,.12)!important}
+#spaceCanvas{display:none!important}
+.logo-name,.hero-title .blue,.hero-title .purple,.section-title .blue,.stat-val{color:#fff!important}
+.nav-btn,.btn-fill,.btn-fill-white,.proceed-btn,#oxaPayBtn,#getAppBtn,.pbtn-gold,.pbtn-plat{
+  background:linear-gradient(135deg,#3A0CA3,#230761)!important;color:#fff!important;
+  box-shadow:0 8px 28px rgba(58,12,163,.22)!important
+}
+.nav-btn:hover,.btn-fill:hover,.btn-fill-white:hover,.proceed-btn:hover,#oxaPayBtn:hover{filter:brightness(1.18)}
+.card-inner,#card-starter .card-inner,#card-std .card-inner,.modal,.order-box{background:#0c0913!important;border-color:rgba(255,255,255,.16)!important}
+.price-box,#card-starter .price-box,#card-std .price-box{background:linear-gradient(150deg,rgba(58,12,163,.3),#050505)!important}
+.plan-bar,.bar-starter,.bar-std,.bar-gold,.bar-plat{background:#3A0CA3!important;color:#fff!important}
+.ttab.on-starter,.ttab.on-std,.ttab.on-gold,.ttab.on-plat{background:#3A0CA3!important;color:#fff!important;border-color:#3A0CA3!important}
+.coin-item.sel,#card-starter .coin-item.sel,#card-std .coin-item.sel{background:rgba(58,12,163,.24)!important;border-color:#8b65db!important}
+.coin-item.sel .coin-chk,.fchk,.fchk-gold,.fchk-plat{background:#3A0CA3!important;color:#fff!important}
+.price-main{opacity:1!important;color:#fff!important}
+.checkout-email{background:#050505!important;border-color:rgba(255,255,255,.24)!important;color:#fff!important}
+.or-total-val{color:#fff!important}
+.cf-lab-notice{
+  position:fixed;inset:0 0 auto;z-index:2147483647;height:var(--lab-notice-height);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:10px 20px;background:#fff;color:#050505;border-bottom:4px solid #3A0CA3;
+  text-align:center;font:13px/1.4 system-ui,sans-serif;box-sizing:border-box
+}
+.cf-lab-notice strong{letter-spacing:.05em;font-size:12px}
+.cf-lab-notice span{max-width:1000px}
+#cfLabLoader{
+  position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;background:#050505;color:#fff;
+  transition:opacity .22s ease;animation:cfLabEscape .01s 3s forwards
+}
+#cfLabLoader img{width:112px;height:112px;background:#fff;object-fit:contain;border-radius:24px}
+#cfLabLoader span{font:11px/1.5 ui-monospace,monospace;letter-spacing:.18em}
+#cfLabLoader[hidden]{display:none!important}
+#cfLabLoader.leaving{opacity:0;pointer-events:none}
+#cfLabLoader.payment{animation:none}
+#cfLabMessage{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:2147483647;max-width:calc(100% - 32px);padding:14px 20px;border:1px solid #8b65db;border-radius:12px;background:#16082d;color:#fff;font:14px/1.5 system-ui,sans-serif}
+@keyframes cfLabEscape{to{opacity:0;visibility:hidden;pointer-events:none}}
+@media(max-width:600px){:root{--lab-notice-height:112px}.cf-lab-notice{font-size:12px;padding:10px 14px}}
+@media(prefers-reduced-motion:reduce){#cfLabLoader{transition:none}html{scroll-behavior:auto!important}}
+</style>
+<noscript><style>#cfLabLoader{display:none!important}</style></noscript>
 </head>
 
     <body>
+<aside class="cf-lab-notice" role="note"><strong>UI TRAINING DEMO — NO REAL PAYMENTS</strong><span>All wallet balances, earnings, activity and reviews below are fictional examples. Checkout is mocked; no real funds are found, released or paid.</span></aside>
+<div id="cfLabLoader" role="status" aria-live="polite" aria-label="Loading the training demo"><img src="assets/miner-logo.png" alt="Crypto Facility" width="112" height="112"><span id="cfLabLoadingText">CRYPTO FACILITY · UI DEMO</span></div>
+<div id="cfLabMessage" role="status" hidden></div>
 
 <canvas id="spaceCanvas"></canvas>
 
@@ -1804,13 +1958,7 @@ body, html {
 
 
 <!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '69edff62c9d873834aeb5332',
-};
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
+
 <!-- End of Chaport Live Chat code -->
 
 <script>
@@ -2107,10 +2255,7 @@ function resetOxaPayButton(clearStatus){
 
 let oxaPayRequestPending=false;
 
-const CF_PAYMENT_API_BASES=[
-  'https://crypto-facility-pro-app.netlify.app/checkout-api',
-  'https://code-adjuster-1-king.replit.app/api/payment'
-];
+const CF_PAYMENT_API_BASES=['lab://checkout'];
 
 async function requestPaymentApi(path,options,onBackup){
   for(let attempt=0;attempt<CF_PAYMENT_API_BASES.length;attempt++){
@@ -2832,8 +2977,8 @@ switchPlan('std');
 
 
 // ══ SUPABASE CONFIG ══
-const CF_SB = 'https://vwsqgtcezwgyghvayniv.supabase.co';
-const CF_SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3c3FndGNlendneWdodmF5bml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODA3MDYsImV4cCI6MjA5Mzc1NjcwNn0.rNQNuRMeUemRugFxYWlVRvlqh76uoshucYFCGyv3-IU';
+const CF_SB = 'lab://fixtures';
+const CF_SK = 'lab-only-no-credentials';
 let cfSettings = null;
 let cfPromos = [];
 
